@@ -45,12 +45,14 @@ ActiveRecord::Schema.define(version: 2019_04_04_104133) do
   create_table "categories_words", id: false, force: :cascade do |t|
     t.integer "category_id"
     t.integer "word_id"
+    t.index ["category_id", "word_id"], name: "index_categories_words_on_category_id_and_word_id", unique: true
     t.index ["category_id"], name: "index_categories_words_on_category_id"
     t.index ["word_id"], name: "index_categories_words_on_word_id"
   end
 
   create_table "questions", force: :cascade do |t|
     t.text "question_content"
+    t.integer "category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -92,6 +94,7 @@ ActiveRecord::Schema.define(version: 2019_04_04_104133) do
   create_table "users_words", id: false, force: :cascade do |t|
     t.integer "user_id"
     t.integer "word_id"
+    t.index ["user_id", "word_id"], name: "index_users_words_on_user_id_and_word_id", unique: true
     t.index ["user_id"], name: "index_users_words_on_user_id"
     t.index ["word_id"], name: "index_users_words_on_word_id"
   end

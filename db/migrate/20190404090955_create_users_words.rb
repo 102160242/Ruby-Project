@@ -4,5 +4,6 @@ class CreateUsersWords < ActiveRecord::Migration[5.2]
       t.references :user, foreign_key: true, index: true
       t.references :word, foreign_key: true, index: true
     end
+    add_index :users_words, [:user_id, :word_id], unique: true
   end
 end
