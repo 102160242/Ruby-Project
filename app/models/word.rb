@@ -8,5 +8,5 @@ class Word < ApplicationRecord
     end
     validates :word, presence: true
     validates :meaning, presence: true
-    validates :word_class, numericality: true, inclusion: {in: 1..4}
+    validates :word_class,presence:true, numericality: true, inclusion: {in: 1..4}
 end
