@@ -8,4 +8,5 @@ class Question < ApplicationRecord
         answers.clear
         tests.clear
     end
+    validates :question_content, presence: true
 end
