@@ -1,8 +1,10 @@
-<p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="col-md-6">
+  <p id="notice"><%= notice %></p>
 
 <h1>Users</h1>
 
-<table>
+<table class="table">
   <thead>
     <tr>
       <th>Username</th>
@@ -32,4 +34,7 @@
 
 <br>
 
-<%= link_to 'New User', new_user_path %>
+<%= link_to 'New User', new_user_path, class: 'btn btn-success' %>
+
+  </div>
+</div>
