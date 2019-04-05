@@ -7,4 +7,6 @@ class Category < ApplicationRecord
         words.clear
         tests.clear
     end
+    VALID_NAME_REGEX = /\A[a-z]+[a-z0-9 ]*\z/i
+    validates :name, presence: true, length: { minimum: 6 }, format: {with: VALID_NAME_REGEX}
 end
