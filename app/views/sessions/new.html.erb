@@ -1,8 +1,7 @@
 <% provide(:title, 'Login') %>
-<h1 class="h1 mt-5">Login</h1>
-
 <div class="row d-flex justify-content-center">
-  <div class="col-md-6">
+  <div class="col-sm-6 col-lg-4 p-4">
+    <h1 class="h1 mt-5">Login</h1>
     <%= form_with model: @user, class: "form mt-5", local: true, url: login_path  do |f| %>   
       <div class="form-group">
       <%= f.label :username %>
@@ -12,6 +11,11 @@
       <%= f.label :password %>
       <%= f.password_field :password, class: "form-control", required: true %>
       </div>
+      <div class="form-group">
+      <%= f.check_box :remember_me, type: "checkbox"%>
+      <%= f.label :remember_me %>
+      </div>
+      
       <%= f.submit "Login", class: "btn btn-outline-primary btn-lg btn-block" %>
     <% end %>
   </div>

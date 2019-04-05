@@ -34,6 +34,7 @@ gem 'bcrypt',         '3.1.12'
 # gem 'capistrano-rails', group: :development
 gem 'jquery-rails'
 gem 'bootstrap', '~> 4.3.1'
+gem 'font-awesome-sass', '~> 5.8.1'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false

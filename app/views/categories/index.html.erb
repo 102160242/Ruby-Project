@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %></p>
+<!--<p id="notice"><%= notice %></p>
 
 <h1>Categories</h1>
 
@@ -25,3 +25,14 @@
 <br>
 
 <%= link_to 'New Category', new_category_path %>
+-->
+<%= provide(:title, "Categories") %>
+<div class="container">
+    <div class="row">
+      <% @categories.each do |category| %>
+        <div class="col-sm-4">
+        <%= link_to category.name, category %>
+        </div>
+      <% end %>
+    </div>
+</div>
