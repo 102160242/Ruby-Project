@@ -16,11 +16,10 @@ class User < ApplicationRecord
     VALID_NAME_REGEX = /\A[a-z0-9]+[\w+\-.]+\z/i
     validates :username, presence: true, length: { maximum: 15, minimum: 6 },
                     format: { with: VALID_NAME_REGEX }
-    VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+    VALID_EMAIL_REGEX = /\A[a-z0-9]+[\w+\.-]@[0-9a-z\.-]+\.[a-z]+\z/i
     validates :email, presence: true, length: { maximum: 255 },
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
     has_secure_password
-    validates :password_digest, presence: true, length: { minimum: 6 }
-                  
+    validates :password_digest, presence: true, length: { minimum: 6 }            
 end
