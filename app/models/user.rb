@@ -13,7 +13,9 @@ class User < ApplicationRecord
     before_destroy { words.clear }
 
     before_save { self.email = email.downcase }
-    validates :username, presence: true, length: { maximum: 15, minimum: 6 }
+    VALID_NAME_REGEX = /\A[a-z0-9]+[\w+\-.]+\z/i
+    validates :username, presence: true, length: { maximum: 15, minimum: 6 },
+                    format: { with: VALID_NAME_REGEX }
     VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
     validates :email, presence: true, length: { maximum: 255 },
                     format: { with: VALID_EMAIL_REGEX },
