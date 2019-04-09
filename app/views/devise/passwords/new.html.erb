@@ -1,0 +1,18 @@
+<% provide(:title, 'Forgot Password') %>
+<div class="row d-flex justify-content-center">
+  <div class="col-md-4">
+    <h1 class="h1 mt-5">Forgot your password?</h1>
+    <%= form_with model: @user, class: "form mt-5", local: true, url: password_path(resource_name)  do |f| %>     
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="form-group">
+      <%= f.label :email %>
+      <%= f.email_field :email, class: "form-control", required: true, autofocus: true, autocomplete: "email" %>
+      </div>
+      <%= f.submit "Send me reset password instructions", class: "btn btn-outline-primary btn-lg btn-block" %>
+    <% end %>
+    <div class="mt-3">
+       <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>

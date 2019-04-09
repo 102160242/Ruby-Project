@@ -7,7 +7,10 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.string :avatar
       t.boolean :admin, default: false
 
-      t.timestamps
+      t.timestamps null: false
     end
+    add_index :users, :reset_password_token, unique: true
+    # add_index :users, :confirmation_token,   unique: true
+    # add_index :users, :unlock_token,         unique: true
   end
 end
