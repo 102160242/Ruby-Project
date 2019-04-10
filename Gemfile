@@ -36,8 +36,12 @@ gem 'omniauth-google-oauth2', '~> 0.4.1'
 gem 'omniauth-twitter', '~> 1.2', '>= 1.2.1'
 # Use ActiveRecord Sessions
 gem 'activerecord-session_store', '~> 1.0'
-
-
+gem "mini_magick"
+gem 'will_paginate'
+gem 'will_paginate-bootstrap4'
+gem 'ruby-debug-ide'
+gem 'debase'
+gem 'rspec'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 

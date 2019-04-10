@@ -15,5 +15,12 @@
   <%= @word.word_class %>
 </p>
 
+<p>
+  <strong>Image:</strong>
+  <% if @word.image.attached? %>
+  <%= image_tag @word.image.variant(resize: "300x300") %>
+  <%end%>
+</p>
+
 <%= link_to 'Edit', edit_word_path(@word) %> |
 <%= link_to 'Back', words_path %>

@@ -4,6 +4,12 @@
   <strong>Name:</strong>
   <%= @category.name %>
 </p>
+<p>
+  <strong>Image:</strong>
+  <% if @category.image.attached? %>
+  <%= image_tag @category.image.variant(resize: "300x300") %>
+  <%end%>
+</p>
 
 <%= link_to 'Edit', edit_category_path(@category) %> |
 <%= link_to 'Back', categories_path %>

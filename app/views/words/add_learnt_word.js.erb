@@ -1,0 +1,13 @@
+<% if params[:word][:option] == "add" %>
+    $("#form_" + <%= @word.id.to_s %> + " input[type='submit']").attr('class', 'btn btn-danger').val("Remove from list");
+    $("#form_" + <%= @word.id.to_s %> + " input[name='word[option]']").val("remove");
+    // Add word to words list
+    var html = '<p id="word_' + <%= @word.id %> + '"><%= @word.word %></p>';
+    $("#words-list").prepend(html);
+    //alert('deleted successfully');
+<% else %>
+    $("#form_" + <%= @word.id.to_s %> + " input[type='submit']").val("Check as Learnt").attr('class', 'btn btn-success');
+    $("#form_" + <%= @word.id.to_s %> + " input[name='word[option]']").val("add");
+    // Remove word from words list
+    $('<%= "#word_#{@word.id}" %>').remove();
+<% end %>

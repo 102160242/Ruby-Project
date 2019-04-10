@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   root 'home#index'
   get 'signup', to: 'users#new'
   post 'signup', to: 'users#create'
+  get 'learn/:category_id', to: 'words#index', as: 'learn'
+  post 'word/add_learnt_word', to: 'words#add_learnt_word'
+
   #get    '/login',   to: 'sessions#new'
   #post   '/login',   to: 'sessions#create'
   # delete '/logout',  to: 'sessions#destroy'

@@ -1,0 +1,11 @@
+<%= provide(:title, "Profile") %>
+<div class="container">
+  <div class="row d-flex justity-content-center mt-5">
+    <div class="col-sm-9 col-md-6">
+        Thong tin ve user...
+    </div>
+    <div class="col-sm-9 col-md-6">
+        <%= render 'form', user: @user %>
+    </div>
+  </div>
+</div>

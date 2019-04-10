@@ -1,10 +1,47 @@
 class WordsController < ApplicationController
   before_action :set_word, only: [:show, :edit, :update, :destroy]
 
+  def add_learnt_word   
+    respond_to do |format|    
+      @word = Word.find_by(id: params[:word][:id])
+      if !@word.nil?
+        if current_user.words.include?(@word)
+          if params[:word][:option] == "add"
+            notice_message = 1
+            format.js { render :action => "add_learnt_word_notice" }
+            format.json { render :json => { status: "error", msg: "This word has already been in your list!" } }
+          else
+            current_user.words.delete(@word)
+            format.js { }
+            format.json { render :json => { status: :ok } }
+          end
+        else
+          if params[:word][:option] == "add"
+            current_user.words << @word
+            format.js { }
+            format.json { render :json => { status: :ok } }
+          else
+            notice_message = 2
+            format.js { render :action => "add_learnt_word_notice" }
+            render :json => { status: :error, msg: "Word is not in your list!" }
+          end
+        end
+      else
+        notice_message = 3
+        format.js { render :action => "add_learnt_word_notice" }   
+        render :json => { status: :error, msg: "Word does not exist!" }
+      end
+    end
+  end
+
   # GET /words
   # GET /words.json
   def index
-    @words = Word.all
+    @category = Category.find_by(id: params[:category_id])
+    redirect_to root_url if @category.nil?
+    @words = Word.joins(:categories)
+                 .where("categories.id = #{params[:category_id]}")
+                 .paginate(page: params[:page], :per_page => 10)
   end
 
   # GET /words/1
@@ -69,6 +106,6 @@ class WordsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def word_params
-      params.require(:word).permit(:word, :meaning, :word_class)
+      params.require(:word).permit(:word, :meaning, :word_class, :image)
     end
 end
