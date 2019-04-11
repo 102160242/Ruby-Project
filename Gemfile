@@ -42,6 +42,7 @@ gem 'will_paginate-bootstrap4'
 gem 'ruby-debug-ide'
 gem 'debase'
 gem 'rspec'
+gem 'faker'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 

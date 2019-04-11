@@ -5,3 +5,50 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+r = Random.new
+### Add User ###
+User.create(email: "admin@gmail.com", password: "123456", admin: true)
+50.times do |n|
+    User.create(email: "exampleuser#{n+1}@gmail.com", password: "123456", admin: false)
+end
+
+### Add followers for each User ###
+count_u = User.count
+count_u.times do |n|
+    User.find(n+1).followers << User.where("users.id <> #{n+1}").order("RANDOM()").limit(r.rand(0..30))
+end
+
+### Add word ###
+1000.times do |n|
+    word_class = r.rand(1..4)
+    Word.create(word: Faker::Creature::Animal.name, meaning: Faker::Quote.most_interesting_man_in_the_world, word_class: word_class)
+end
+
+### Add category ###
+15.times do |n|
+    Category.create(name: Faker::Nation.capital_city)
+end
+
+### Add word to Category ###
+total_w = Word.count
+total_c = Category.count
+total_w.times do |n|
+    c = Category.find(r.rand(1..total_c))
+    w = Word.find(n+1).categories
+    w << c if(!w.include?(c)) 
+end
+
+### Add Question + Answer ###
+1000.times do |n|
+    q = Question.create(question_content: Faker::TvShows::GameOfThrones.quote, category_id: r.rand(1..total_c))
+    if q.valid?
+        right_answer = Random.new.rand(0..3)
+        4.times do |k|
+            if k == right_answer
+                Answer.create(question_id: q.id, answer_content: Faker::TvShows::GameOfThrones.character, right_answer: :true)
+            else
+                Answer.create(question_id: q.id, answer_content: Faker::TvShows::GameOfThrones.character, right_answer: :false)
+            end
+        end   
+    end
+end

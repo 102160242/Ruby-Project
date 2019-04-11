@@ -1,5 +1,6 @@
 class WordsController < ApplicationController
   before_action :set_word, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:index]
 
   def add_learnt_word   
     respond_to do |format|    
@@ -42,6 +43,12 @@ class WordsController < ApplicationController
     @words = Word.joins(:categories)
                  .where("categories.id = #{params[:category_id]}")
                  .paginate(page: params[:page], :per_page => 10)
+    @my_words = Word.joins(:categories)
+                     .where("categories.id = #{params[:category_id]}")
+                     .joins(:users)
+                     .where("users.id = #{current_user.id}")
+                     .last(10)
+                     .reverse
   end
 
   # GET /words/1

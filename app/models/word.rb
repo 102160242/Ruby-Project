@@ -14,7 +14,7 @@ class Word < ApplicationRecord
 
     class << self
         def word_class_name(index)
-            return @word_class[index]
+            return @word_class[index - 1]
         end
         def word_class_index(class_name)
             return @word_class.find_index(class_name)
