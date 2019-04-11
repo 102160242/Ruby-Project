@@ -1,17 +1,5 @@
 <%= provide(:title, "Learn words about #{@category.name}") %>
 <% content_for :header do %>
-  <script>
-    // $(document).ready(function() {
-    //   $('[id^=form_]')
-    //   .bind('ajax:success', function(evt, data, status, xhr) {
-    //     console.log(data);
-    //   })
-    //   .bind("ajax:error", function(evt, xhr, status, error) {
-    //     //function called on status: 401 or 500 (for ex.)
-    //     console.log(xhr.responseText);
-    //   });
-    // });
-  </script>
 <% end %>
 <div class="container">
   <div class="row d-flex justity-content-center mt-5">
@@ -52,7 +40,7 @@
           </div>
           </div>
         </div>   
-      <div class="mt-5"><%= will_paginate @categories %></div>
+      <div class="mt-5"><%= will_paginate @words %></div>
     </div>
     <div class="col-sm-9 col-md-4">
       <div class="card border-left-0 border-right-0 border-success mb-3">
@@ -63,7 +51,10 @@
           <% end %>
         </div>
         <div class="card-footer bg-transparent border-success">
-          <%= link_to 'Start Testing', root_url, class: "btn btn-block btn-outline-success" %>
+          <%= form_for :test, url: tests_path, remote: true do |f| %>
+              <%= hidden_field :test, :category_id, value: @category.id %>
+              <%= submit_tag 'Start Testing', class: "btn btn-block btn-outline-success" %>
+          <% end %>
         </div>
       </div>
     </div>

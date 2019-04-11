@@ -1,0 +1,5 @@
+<% if @test.valid? %>
+window.location.replace("<%= do_test_path(@test) %>");
+<% else %>
+alert("An error has occured, please try again later");
+<% end %>

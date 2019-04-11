@@ -15,10 +15,14 @@ Rails.application.routes.draw do
     post 'login', to: 'devise/sessions#create'
     delete 'logout', to: 'devise/sessions#destroy', via: Devise.mappings[:user].sign_out_via
   end
-  resources :tests
+  resources :tests, only: [:show, :create, :update] do
+    member do
+      get 'do', to: 'tests#edit'
+    end
+  end
+
   resources :answers
   resources :questions
   resources :categories
   resources :words
-  #resources :users
 end
