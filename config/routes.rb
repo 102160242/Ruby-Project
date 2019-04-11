@@ -22,6 +22,10 @@ Rails.application.routes.draw do
     end
   end
   resources :users, only: :show
+  namespace :admin do
+    resources :categories
+    resources :words
+  end
   resources :answers
   resources :questions
   resources :categories

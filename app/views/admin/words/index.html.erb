@@ -1,0 +1,54 @@
+
+<%= provide(:title, "Learn words about ") %>
+    <% content_for :header do %>
+  <script>
+    // $(document).ready(function() {
+    //   $('[id^=form_]')
+    //   .bind('ajax:success', function(evt, data, status, xhr) {
+    //     console.log(data);
+    //   })
+    //   .bind("ajax:error", function(evt, xhr, status, error) {
+    //     //function called on status: 401 or 500 (for ex.)
+    //     console.log(xhr.responseText);
+    //   });
+    // });
+  </script>
+<% end %>
+<div class="container">
+  <div class="row d-flex justity-content-center mt-5">
+    <div class="col-12">
+    <div class="table responsive">
+        <table class="table">
+            <thead>
+                <th>ID</th>
+                <th>Word</th>
+                <th>Class</th>
+                <th>Meaning</th>
+                <th>Image</th>
+                <th>Action</th>
+            <thead>
+            <tbody>
+                <% @words.each do |word| %>
+                  <tr>
+                    <td><%= word.id %></td>
+                    <td><%= word.word %></td>
+                    <td><%= word.word_class %></td>
+                    <td><%= word.meaning %></td>
+                    <td>
+                      <% if word.image.attached? %>
+                      <%= image_tag word.image.variant(resize: "100x100"), class: "card-img-top img-thumbnail" %>
+                      <% end %>
+                    </td>
+                    <td>
+                      <%= link_to "Edit", edit_admin_word_path(word) %>
+                      <%= link_to "Destroy", admin_word_path(word), method: :delete, data: { confirm: 'Are you sure?' } %>
+                    <td> 
+                  </tr>               
+                <% end %>      
+            </tbody>
+        </table>
+    </div>
+    <div class="mt-5"><%= will_paginate @words %></div>
+    </div>
+
+</div>
