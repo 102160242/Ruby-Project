@@ -119,6 +119,7 @@ ActiveRecord::Schema.define(version: 2019_04_09_043057) do
 
   create_table "words", force: :cascade do |t|
     t.string "word"
+    t.string "ipa"
     t.string "meaning"
     t.integer "word_class"
     t.datetime "created_at", null: false

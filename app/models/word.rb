@@ -10,6 +10,7 @@ class Word < ApplicationRecord
     end
     validates :word, presence: true
     validates :meaning, presence: true
+    validates :ipa, presence: true
     validates :word_class, presence:true, numericality: true, inclusion: {in: 1..4}
 
     class << self

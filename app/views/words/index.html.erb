@@ -14,7 +14,10 @@
                   <div class="card-body">
                     <div class="row d-flex">
                       <div class="col-sm-6">
-                        <h5 class="card-title text-info"><%= word.word %></h5> <p class="text-muted">- <%= Word.word_class_name(word.word_class) %></p>
+                        <h5 class="card-title text-info d-inline"><%= word.word %></h5>
+                        <p class="text-muted d-inline">(<%= Word.word_class_name(word.word_class) %>)</p>
+                        <p class="text-muted">/<%= word.ipa %>/</p> 
+                        
                         <p><%= word.meaning %></p>
                       </div>
                       <div class="col-sm-6">

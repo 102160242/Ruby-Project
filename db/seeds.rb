@@ -19,10 +19,12 @@ count_u.times do |n|
 end
 
 ### Add word ###
-1000.times do |n|
+2000.times do |n|
     word_class = r.rand(1..4)
     stt = r.rand(1..8)
+    ipas = ["ɪnˈteɡ.rə.ti", "ɪnˈhɑːns", "səˈfɪs.tɪ.keɪ.tɪd", "ˈæk.ses", "ɪˈfekt", "ˈkɑːn.tekst"]
     w = Word.new
+    w.ipa = ipas[rand(ipas.size)]
     w.word = Faker::Creature::Animal.name
     w.meaning = Faker::Quote.most_interesting_man_in_the_world
     w.word_class = word_class
