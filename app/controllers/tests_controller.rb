@@ -6,10 +6,15 @@ class TestsController < ApplicationController
   def edit
     if !current_user.tests.include?(@test)
       render file: Rails.public_path.join("404.html"), layout: false
+    else
+      if @test.created_at != @test.updated_at
+        redirect_to learn_path(@test.category)
+      end
     end
   end
 
   def show
+    @chosen_answers = QuestionsTest.select(:question_id, :chosen_answer_id).where(:test_id => @test.id).all
   end
 
   # POST /tests
@@ -41,29 +46,30 @@ class TestsController < ApplicationController
   # PATCH/PUT /tests/1
   # PATCH/PUT /tests/1.json
   def update
-    answers = params[:test][:answer_ids]
-    score = 0
-    @test.questions.each do |question|
-      ans = answers["question_#{question.id}"]
-      if !ans.nil?
-        if question.answers.where("answers.id = #{ans.to_i}").first.right_answer
-          score = score + 1
+    begin
+      answers = params[:test][:answer_ids]
+      score = 0
+      @test.questions.each do |question|
+        ans = answers["question_#{question.id}"]
+        if !ans.nil?
+          if question.answers.where("answers.id = #{ans.to_i}").first.right_answer
+            score = score + 1
+          end
+          ## Update Chosen Answer ID ##
+          QuestionsTest.where(:question_id => question.id, :test_id => @test.id)
+                      .update_all(:chosen_answer_id => ans.to_i)
+          ## Save Score ##
+          @test.score = score
+          @test.save
         end
-        ## Update Chosen Answer ID ##
-        QuestionsTest.where(:question_id => question.id, :test_id => @test.id)
-                     .update_all(:chosen_answer_id => ans.to_i)
       end
-
-      ## Save Score ##
-      @test.score = score
-      @test.save
-    end
-    respond_to do |format|
-      if @test.update(test_params)
+      respond_to do |format|
         format.html { redirect_to @test }
         format.json { render :show, status: :ok, location: @test }
-      else
-        format.html { render :edit }
+      end
+    rescue
+      respond_to do |format|
+        format.html { render :edit, notice: "Please do you test again. An unexpected error has occured!" }
         format.json { render json: @test.errors, status: :unprocessable_entity }
       end
     end

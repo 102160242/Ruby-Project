@@ -1,25 +1,16 @@
 class UsersController < ApplicationController
-  # PATCH/PUT /users/1
-  # PATCH/PUT /users/1.json
-  def update
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  def show
+    @user = User.find(params[:id])
 
-  # DELETE /users/1
-  # DELETE /users/1.json
-  def destroy
-    @user.destroy
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    ## Get all tests of current user & all the followed users
+    ids = @user.following.select(:id).map {|x| x.id} << @user.id
+    @tests = Test.where(user_id: ids)
+                .where.not(score: nil)
+                .order("id DESC").limit(10)
+    # @tests = @user.tests
+    # @user.following.each do |u|
+    #   @tests.merge(u.tests)
+    # end
+    # @tests.order("id DESC").limit(10)
   end
 end

@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   #post   '/login',   to: 'sessions#create'
   # delete '/logout',  to: 'sessions#destroy'
   #devise_for :users, path: '', path_names: { sign_in: 'login', sign_out: 'logout'}
+  ##get 'users/:id', to: 'users#show', as: 'usersssss'
   devise_for :users
   as :user do
     get 'login', to: 'devise/sessions#new'
@@ -20,7 +21,7 @@ Rails.application.routes.draw do
       get 'do', to: 'tests#edit'
     end
   end
-
+  resources :users, only: :show
   resources :answers
   resources :questions
   resources :categories

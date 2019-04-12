@@ -6,7 +6,17 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <%= link_to raw("<i class=\"far fa-address-book\"></i> Categories"), categories_path, class: 'nav-link' %>
+      </li>
+    </ul>
     <ul class="navbar-nav ml-auto">
+      <% if user_signed_in? %>
+        <li class="nav-item">
+          <%= link_to raw("<i class=\"fas fa-newspaper\"></i> New Feeds"), user_path(current_user), class: 'nav-link' %>
+        </li>
+      <% end %>
       <li class="nav-item">
         <% if user_signed_in? %>
         <li class="nav-item dropdown">

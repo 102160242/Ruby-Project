@@ -1,27 +1,35 @@
 <%= provide(:title, "Do test about #{@test.category.name}") %>
 <div class="container mt-5">
-    <h5>Do your test by answering the questions bellow</h5>
-    <div class="row">
-        <div class="col-12">
-            <%= form_for :test, url: test_path(@test), method: :patch do |f| %>
-                <% @test.questions.each_with_index do |question, i| %>
-                    <div class="m-1 border-1">
-                        <span class="text-info font-weight-bold">
-                            <%= (i+1).to_s + ". " + question.question_content %>
-                        </span>
-                        <div class="ml-3">
-                            <% question.answers.each_with_index do |answer, j| %>
-                                <div class="form-check">
-                                    <label class="form-check-label" for="radio1">
-                                        <input type="radio" class="form-check-input" name="<%= "test[answer_ids][question_#{question.id}]" %>" value="<%= answer.id %>"><%= answer.answer_content %>
-                                    </label>
+    <div class="card border-bottom-primary">
+        <%= form_for :test, url: test_path(@test), method: :patch do |f| %>
+            <div class="card-header border-primary">
+                <h5 class="card-header-title">Do your test by answering the questions bellow</h5>
+            </div>
+            <div class="card-body bg-transparent border-primary">
+                <div class="row">
+                    <div class="col">
+                        <% @test.questions.each_with_index do |question, i| %>
+                            <div class="m-1 border-1">
+                                <span class="text-info font-weight-bold">
+                                    <%= (i+1).to_s + ". " + question.question_content %>
+                                </span>
+                                <div class="ml-3">
+                                    <% question.answers.each_with_index do |answer, j| %>
+                                        <div class="form-check">
+                                            <label class="form-check-label" for="radio1">
+                                                <input type="radio" class="form-check-input" name="<%= "test[answer_ids][question_#{question.id}]" %>" value="<%= answer.id %>"><%= answer.answer_content %>
+                                            </label>
+                                        </div>
+                                    <% end %>
                                 </div>
-                            <% end %>
-                        </div>
+                            </div>
+                        <% end %>
                     </div>
-                <% end %>
-                <%= f.submit "Submit", class: "btn btn-success" %>
-            <% end %>
-        </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-primary">
+                <%= f.submit "Submit", class: "btn btn-block btn-outline-success" %>
+            </div>
+        <% end %>
     </div>
 </div>

@@ -1,7 +1,48 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>User:</strong>
-  <%= @test.user_id %>
-</p>
-
+<% provide(:title, "Test Result") %>
+<div class="containter">
+  <div class="row d-flex justify-content-center mt-5">
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-header">
+          <h4>Result</h4>
+        </div>
+        <div class="card-body">
+          <%= render 'result', test: @test %>
+        </div>
+      </div>
+      <div class="card mt-4">
+        <div class="card-header">
+          <h4>Your Test</h4>
+        </div>
+        <div class="card-body">
+            <% @test.questions.each_with_index do |question, i| %>
+              <div class="m-1 border-1">
+                  <span class="text-info font-weight-bold">
+                      <%= (i+1).to_s + ". " + question.question_content %>
+                  </span>
+                  <div class="ml-3">
+                      <% question.answers.each_with_index do |answer, j| %>
+                          <div class="form-check">
+                              <label class="form-check-label" for="radio1">
+                                  <% 
+                                    @chosen_answer = @chosen_answers.select(:chosen_answer_id).where(:question_id => question.id).first
+                                    checked = ""
+                                    if !@chosen_answer['chosen_answer_id'].nil? && @chosen_answer['chosen_answer_id'] == answer.id
+                                        checked = "checked"
+                                    end
+                                  %>
+                                  <input type="radio" class="form-check-input" name="<%= "test[answer_ids][question_#{question.id}]" %>" value="<%= answer.id %>" <%= checked %> disabled><span class="<%= "text-success" if answer.right_answer %>"><%= answer.answer_content %></span>
+                              </label>
+                          </div>
+                      <% end %>
+                  </div>
+              </div>
+          <% end %>
+          <div class="text-center mt-4">
+            <%= render 'new_form', category_id: @test.category.id, btn_text: "Do another Test" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,4 @@
+<%= form_for :test, url: tests_path, remote: true do |f| %>
+    <%= hidden_field :test, :category_id, value: category_id %>
+    <%= submit_tag defined?(btn_text).nil? ? 'Start Testing' : btn_text, class: "btn btn-block btn-outline-success" %>
+<% end %>

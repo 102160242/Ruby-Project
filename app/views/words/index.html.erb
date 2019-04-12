@@ -4,7 +4,7 @@
 <div class="container">
   <div class="row d-flex justity-content-center mt-5">
     <div class="col-sm-9 col-md-8">
-      <div class="card border-left-0 border-right-0 border-primary mb-3">
+      <div class="card border-bottom-primary mb-3">
         <div class="card-header bg-transparent border-primary"><h2 class="h2">Words List</h2></div>
         <div class="card-body">
           <div class="row">
@@ -43,7 +43,7 @@
       <div class="mt-5"><%= will_paginate @words %></div>
     </div>
     <div class="col-sm-9 col-md-4">
-      <div class="card border-left-0 border-right-0 border-success mb-3">
+      <div class="card border-bottom-success mb-3">
         <div class="card-header bg-transparent border-success"><h2 class="h2">My Words</h2></div>
         <div class="card-body" id="words-list">
           <% @my_words.each do |word| %>
@@ -51,10 +51,7 @@
           <% end %>
         </div>
         <div class="card-footer bg-transparent border-success">
-          <%= form_for :test, url: tests_path, remote: true do |f| %>
-              <%= hidden_field :test, :category_id, value: @category.id %>
-              <%= submit_tag 'Start Testing', class: "btn btn-block btn-outline-success" %>
-          <% end %>
+          <%= render file: 'tests/_new_form.html.erb', locals: { :category_id => @category.id } %>
         </div>
       </div>
     </div>

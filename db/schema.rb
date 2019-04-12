@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(version: 2019_04_09_043057) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.string "name"
     t.string "email"
     t.boolean "admin", default: false
     t.datetime "created_at", null: false
@@ -103,6 +104,7 @@ ActiveRecord::Schema.define(version: 2019_04_09_043057) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   create_table "users_words", id: false, force: :cascade do |t|

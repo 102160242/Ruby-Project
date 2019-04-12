@@ -7,9 +7,9 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 r = Random.new
 ### Add User ###
-User.create(email: "admin@gmail.com", password: "123456", admin: true)
+User.create(name: Faker::Name.name, email: "admin@gmail.com", password: "123456", admin: true)
 50.times do |n|
-    User.create(email: "exampleuser#{n+1}@gmail.com", password: "123456", admin: false)
+    User.create(name: Faker::Name.name, email: "exampleuser#{n+1}@gmail.com", password: "123456", admin: false)
 end
 
 ### Add followers for each User ###
@@ -21,12 +21,21 @@ end
 ### Add word ###
 1000.times do |n|
     word_class = r.rand(1..4)
-    Word.create(word: Faker::Creature::Animal.name, meaning: Faker::Quote.most_interesting_man_in_the_world, word_class: word_class)
+    stt = r.rand(1..8)
+    w = Word.new
+    w.word = Faker::Creature::Animal.name
+    w.meaning = Faker::Quote.most_interesting_man_in_the_world
+    w.word_class = word_class
+    w.image.attach(io: File.open(File.join(Rails.root, "app/assets/images/example/#{stt}.jpg")), filename: "#{stt}.jpg")
+    w.save
 end
-
 ### Add category ###
 15.times do |n|
-    Category.create(name: Faker::Nation.capital_city)
+    stt = r.rand(1..8)
+    c = Category.new
+    c.name = Faker::Nation.capital_city
+    c.image.attach(io: File.open(File.join(Rails.root, "app/assets/images/example/#{stt}.jpg")), filename: "#{stt}.jpg")
+    c.save
 end
 
 ### Add word to Category ###
@@ -45,9 +54,9 @@ end
         right_answer = Random.new.rand(0..3)
         4.times do |k|
             if k == right_answer
-                Answer.create(question_id: q.id, answer_content: Faker::TvShows::GameOfThrones.character, right_answer: :true)
+                Answer.create(question_id: q.id, answer_content: Faker::TvShows::GameOfThrones.character, right_answer: true)
             else
-                Answer.create(question_id: q.id, answer_content: Faker::TvShows::GameOfThrones.character, right_answer: :false)
+                Answer.create(question_id: q.id, answer_content: Faker::TvShows::GameOfThrones.character, right_answer: false)
             end
         end   
     end
