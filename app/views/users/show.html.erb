@@ -21,12 +21,9 @@
           </h4>
         </div>
         <div class="col-12 col-md-auto mt-2 mt-md-0 mb-md-3">
-          <% if user_signed_in? && current_user != @user %>
-          <!-- Button -->
-          <a href="#!" class="btn btn-primary d-block d-md-inline-block">
-            Follow
-          </a>
-          <% end%>
+          <%= if user_signed_in? && current_user != @user
+              render 'follow_form'
+          end%>
         </div>
       </div> <!-- / .row -->
     </div> <!-- / .header-body -->
@@ -44,8 +41,8 @@
                       <div class="row align-items-center">
                         <div class="col-auto">                          
                           <!-- Avatar -->
-                          <a href="#!" class="avatar">
-                            <img src="<%= gravatar_url(@user.email, 50) %>" alt="" class="avatar-img rounded-circle">
+                          <a href="<%= user_path(test.user) %>" class="avatar">
+                            <img src="<%= gravatar_url(test.user.email, 50) %>" alt="" class="avatar-img rounded-circle">
                           </a>
 
                         </div>
