@@ -1,13 +1,70 @@
 <%= provide(:title, "Learn words about #{@category.name}") %>
 <% content_for :header do %>
+<script>
+function updateQueryStringParameter(uri, key, value) {
+  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+  if (uri.match(re)) {
+    return uri.replace(re, '$1' + key + "=" + value + '$2');
+  }
+  else {
+    return uri + separator + key + "=" + value;
+  }
+}
+
+function searchAndFilter()
+{
+  var uri = window.location.href;
+  var search_key = $("#search_key").val();
+  var filter = $("#filter").val();
+  
+  // Update URL
+  uri = updateQueryStringParameter(uri, "page", 1); // Doi ve page 1 de tranh khong co tu khi so luong tu khong du paginate
+  uri = updateQueryStringParameter(uri, "search_key", search_key);
+  if(filter == "az" || filter == "za" || filter == "learnt" || filter == "unlearnt")
+    uri = updateQueryStringParameter(uri, "filter", filter);
+  window.location.replace(uri);
+}
+$(document).ready(function() {
+  // Chan user nhan phim enter
+  $('#searchAndFilterForm').submit(function(e) {
+    searchAndFilter();
+    e.preventDefault();
+    return false;
+  });
+});
+</script>
 <% end %>
 <div class="container">
   <div class="row d-flex justity-content-center mt-5">
-    <div class="col-sm-9 col-md-8">
+    <div class="col-md-8">
       <div class="card border-bottom-primary mb-3">
         <div class="card-header bg-transparent border-primary"><h2 class="h2">Words List</h2></div>
         <div class="card-body">
           <div class="row">
+            <div class="col-12">
+              <form class="form-inline align-items-center" id="searchAndFilterForm">
+                <div class="form-row align-items-center">
+                  <div class="col-auto">
+                    <label class="my-1 mr-2 d-inline" for="search_key">Search</label>
+                    <input type="text" class="form-control mr-3 d-inline" id="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
+                  </div>
+                  <div class="col-auto">
+                    <label class="my-1 mr-2 d-inline" for="filter">Filter</label>
+                    <select class="custom-select mr-3 d-inline" id="filter">
+                      <option value="az" <%= "selected" if(@filter == "az") %>>A-Z</option>
+                      <option value="za" <%= "selected" if(@filter == "za") %>>Z-A</option>
+                      <option value="learnt" <%= "selected" if(@filter == "learnt") %>>Learnt Words</option>
+                      <option value="unlearnt" <%= "selected" if(@filter == "unlearnt") %>>Unlearnt Words</option>
+                    </select>
+                  </div>
+                  <div class="col-auto">
+                    <button id="search" class="btn btn-primary mb-2">Submit</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <br>
             <% @words.each do |word| %>
               <div class="col-12">
                 <div class="card mt-1">
@@ -16,8 +73,7 @@
                       <div class="col-sm-6">
                         <h5 class="card-title text-info d-inline"><%= word.word %></h5>
                         <p class="text-muted d-inline">(<%= Word.word_class_name(word.word_class) %>)</p>
-                        <p class="text-muted">/<%= word.ipa %>/</p> 
-                        
+                        <p class="text-muted">/<%= word.ipa %>/</p>                         
                         <p><%= word.meaning %></p>
                       </div>
                       <div class="col-sm-6">
@@ -43,15 +99,16 @@
           </div>
           </div>
         </div>   
-      <div class="mt-5"><%= will_paginate @words %></div>
+      <div class="mt-5"><%= will_paginate @words, remote: true %></div>
     </div>
-    <div class="col-sm-9 col-md-4">
+    <div class="col-md-4">
       <div class="card border-bottom-success mb-3">
         <div class="card-header bg-transparent border-success"><h2 class="h2">My Words</h2></div>
         <div class="card-body" id="words-list">
           <% @my_words.each do |word| %>
             <%= render 'word_brief', word: word %>
           <% end %>
+          <%#= link_to "Full list", "#", class: "mt-3" %>
         </div>
         <div class="card-footer bg-transparent border-success">
           <%= render file: 'tests/_new_form.html.erb', locals: { :category_id => @category.id } %>

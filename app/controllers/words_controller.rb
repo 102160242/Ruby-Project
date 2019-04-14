@@ -39,9 +39,16 @@ class WordsController < ApplicationController
   def index
     @category = Category.find_by(id: params[:category_id])
     redirect_to root_url if @category.nil?
+
+    @search_key = (params[:search_key].nil? || params[:search_key] == "") ? "" : params[:search_key]
+    @filter = (params[:filter].nil? || params[:filter] == "") ? "" : params[:filter]
+
     @words = Word.joins(:categories)
                  .where("categories.id = #{params[:category_id]}")
+                 .search(@search_key)
+                 .filter_(@filter, current_user.id)
                  .paginate(page: params[:page], :per_page => 10)
+
     @my_words = Word.joins(:categories)
                      .where("categories.id = #{params[:category_id]}")
                      .joins(:users)

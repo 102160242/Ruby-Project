@@ -8,14 +8,14 @@
 r = Random.new
 ### Add User ###
 User.create(name: Faker::Name.name, email: "admin@gmail.com", password: "123456", admin: true)
-50.times do |n|
+200.times do |n|
     User.create(name: Faker::Name.name, email: "exampleuser#{n+1}@gmail.com", password: "123456", admin: false)
 end
 
 ### Add followers for each User ###
 count_u = User.count
 count_u.times do |n|
-    User.find(n+1).followers << User.where("users.id <> #{n+1}").order("RANDOM()").limit(r.rand(0..30))
+    User.find(n+1).followers << User.where("users.id <> #{n+1}").order("RANDOM()").limit(r.rand(0..20))
 end
 
 ### Add word ###

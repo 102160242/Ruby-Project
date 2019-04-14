@@ -21,10 +21,10 @@
         <% if user_signed_in? %>
         <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-user"></i> <%= current_user.email %>
+          <i class="fas fa-user"></i> <%= current_user.name %>
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <%= link_to raw('Profile'), edit_user_registration_path(current_user.id), class: "dropdown-item" %>
+          <%= link_to raw('<i class="far fa-id-badge"></i> Profile'), edit_user_registration_path(current_user.id), class: "dropdown-item" %>
           <div class="dropdown-divider"></div>
           <%= link_to raw('<i class="fas fa-sign-out-alt"></i> Logout'), logout_path, class: "dropdown-item", method: "delete" %>
         </div>
