@@ -1,8 +1,9 @@
 class Admin::QuestionsController < ApplicationController
+  before_action :set_question, only: [:show, :edit, :update, :destroy]
     # GET /questions
   # GET /questions.json
   def index
-    @questions = Question.all
+    @questions = Question.all.paginate(page: params[:page], :per_page => 15)
   end
 
   # GET /questions/1
@@ -42,7 +43,7 @@ class Admin::QuestionsController < ApplicationController
   def update
     respond_to do |format|
       if @question.update(question_params)
-        format.html { redirect_to admin_question_path, notice: 'Question was successfully updated.' }
+        format.html { redirect_to @question, notice: 'Question was successfully updated.' }
         format.json { render :show, status: :ok, location: @question }
       else
         format.html { render :edit }
@@ -57,7 +58,7 @@ class Admin::QuestionsController < ApplicationController
     @question = Question.find(params[:id])
     @question.destroy
     respond_to do |format|
-      format.html { redirect_to questions_url, notice: 'Question was successfully destroyed.' }
+      format.html { redirect_to admin_questions_path, notice: 'Question was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
