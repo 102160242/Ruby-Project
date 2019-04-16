@@ -8,4 +8,25 @@ class Category < ApplicationRecord
     end
     VALID_NAME_REGEX = /\A[a-z]+[a-z0-9 ]*\z/i
     validates :name, presence: true, length: { minimum: 6 }, format: {with: VALID_NAME_REGEX}
+    class << self
+        def search(key)
+            if(key != "" && !key.nil?)
+                where("name LIKE ?", "%#{key}%")
+            else
+                all
+            end
+        end
+
+        def filter_(key)
+            if(!key.nil?) 
+                if key == "za"
+                    order("categories.name DESC")
+                else
+                    order("categories.name ASC") # Order mac dinh theo A-Z
+                end               
+            else
+                all
+            end
+        end
+    end
 end

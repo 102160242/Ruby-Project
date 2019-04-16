@@ -4,7 +4,11 @@ class CategoriesController < ApplicationController
   # GET /categories
   # GET /categories.json
   def index
-    @categories = Category.all.paginate(page: params[:page], :per_page => 6)
+    @search_key = (params[:search_key].nil? || params[:search_key] == "") ? "" : params[:search_key]
+    @filter = (params[:filter].nil? || params[:filter] == "") ? "" : params[:filter]
+    @categories = Category.search(@search_key)
+                          .filter_(@filter)
+                          .paginate(page: params[:page], :per_page => 6)
   end
 
   # GET /categories/1

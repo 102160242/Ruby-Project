@@ -23,6 +23,7 @@ class User < ApplicationRecord
     validates :email, presence: true, length: { maximum: 255 },
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
+    validates :name, presence: true
 
     def follow(other_user)
       following << other_user

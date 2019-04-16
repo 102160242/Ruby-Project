@@ -1,34 +1,60 @@
-<!--<p id="notice"><%= notice %></p>
-
-<h1>Categories</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @categories.each do |category| %>
-      <tr>
-        <td><%= category.name %></td>
-        <td><%= link_to 'Show', category %></td>
-        <td><%= link_to 'Edit', edit_category_path(category) %></td>
-        <td><%= link_to 'Destroy', category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Category', new_category_path %>
--->
 <%= provide(:title, "Categories") %>
+<% content_for :header do %>
+<script>
+function updateQueryStringParameter(uri, key, value) {
+  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+  if (uri.match(re)) {
+    return uri.replace(re, '$1' + key + "=" + value + '$2');
+  }
+  else {
+    return uri + separator + key + "=" + value;
+  }
+}
+
+function searchAndFilter()
+{
+  var uri = window.location.href;
+  var search_key = $("#search_key").val();
+  var filter = $("#filter").val();
+  
+  // Update URL
+  uri = updateQueryStringParameter(uri, "page", 1); // Doi ve page 1 de tranh khong co tu khi so luong tu khong du paginate
+  uri = updateQueryStringParameter(uri, "search_key", search_key);
+  if(filter == "az" || filter == "za")
+    uri = updateQueryStringParameter(uri, "filter", filter);
+  window.location.replace(uri);
+}
+$(document).ready(function() {
+  // Chan user nhan phim enter
+  $('#searchAndFilterForm').submit(function(e) {
+    searchAndFilter();
+    e.preventDefault();
+    return false;
+  });
+});
+</script>
+<% end %>
 <div class="container">
     <h1 class="h1 mt-5">Categories</h1>
+    <form class="form-inline align-items-center mb-3" id="searchAndFilterForm">
+      <div class="form-row align-items-center">
+        <div class="col-auto">
+          <label class="my-1 mr-2 d-inline" for="search_key">Search</label>
+          <input type="text" class="form-control mr-3 d-inline" id="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
+        </div>
+        <div class="col-auto">
+          <label class="my-1 mr-2 d-inline" for="filter">Filter</label>
+          <select class="custom-select mr-3 d-inline" id="filter">
+            <option value="az" <%= "selected" if(@filter == "az") %>>A-Z</option>
+            <option value="za" <%= "selected" if(@filter == "za") %>>Z-A</option>
+          </select>
+        </div>
+        <div class="col-auto">
+          <button id="search" class="btn btn-primary mb-2">Submit</button>
+        </div>
+      </div>
+    </form>
     <div class="row d-flex justify-content-center">
       <% @categories.each do |category| %>
         <div class="col-sm-6 col-md-4">
@@ -55,7 +81,9 @@
                 </p>
 
               </div>
-              <div class="col-auto">
+              <%
+=begin%>
+ <div class="col-auto">
                 
                 <!-- Dropdown -->
                 <div class="dropdown">
@@ -75,7 +103,9 @@
                   </div>
                 </div>
 
-              </div>
+              </div> 
+<%
+=end%>
             </div> <!-- / .row -->
           </div> <!-- / .card-body -->
         </div>
