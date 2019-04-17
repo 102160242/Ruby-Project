@@ -1,0 +1,29 @@
+<%= provide(:title, "Tests") %>
+<div class="container">
+    <h1 class="h1 mt-5">Tests</h1>
+    <div class="row d-flex justify-content-between">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>ID</th>
+                <th>User</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                <% @tests.each do |test| %>
+                  <tr>
+                    <td><%= test.id %></td>
+                    <td><%= test.user_id %></td>
+                    <td>
+                        <%= link_to 'Show', admin_test_path(test), :class => "btn btn-outline-info" %>
+                        <%= link_to 'Destroy', admin_test_path(test), method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-outline-danger" %>
+                    </td>
+                  </tr>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    <div class="mt-5"><%= will_paginate @tests %></div>
+</div>

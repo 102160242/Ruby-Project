@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     resources :questions
     resources :categories
     resources :words
+    resources :tests
+    resources :users
   end
   #get    '/login',   to: 'sessions#new'
   #post   '/login',   to: 'sessions#create'

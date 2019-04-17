@@ -1,0 +1,12 @@
+<% provide(:button_text, 'Save changes') %>
+<% provide(:title, 'Edit user') %>
+<div class="container">
+    <h1>Editing User</h1>
+    <div class="col-md-6   ">
+        <%= render 'form', user: @user %>
+        <td>
+            <%= link_to 'Show', admin_user_path(@user), :class => "btn btn-outline-info" %> 
+            <%= link_to 'Back', admin_users_path, :class=>"btn btn-outline-warning" %>
+        </td>
+    </div>
+</div>
