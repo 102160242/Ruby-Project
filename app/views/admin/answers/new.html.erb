@@ -8,7 +8,7 @@
           <h2><%= pluralize(@answer.errors.count, "error") %> prohibited this answer from being saved:</h2>
 
           <ul>
-          <% answer.errors.full_messages.each do |message| %>
+          <% @answer.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
           </ul>
@@ -16,7 +16,7 @@
       <% end %>
 
         <%= form.label :question_id %>
-        <%= form.text_field :question_id, class:'form-control' %>
+        <%= select "answer", "question_id", @question , { include_blank: false }, { class: "form-control" } %>
 
         <%= form.label :answer_content %>
         <%= form.text_area :answer_content, class:'form-control' %>
@@ -25,7 +25,7 @@
         <%= form.check_box :right_answer %>
         </br>
       <%= form.submit yield(:button_text), class: "btn btn-outline-primary" %>
+      <%= link_to 'Back', admin_answers_path, class: "btn btn-outline-warning" %>
     <% end %>
-    <%= link_to 'Back', admin_answers_path, class: "btn btn-outline-warning" %>
   </div>
 </div>

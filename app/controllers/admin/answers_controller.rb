@@ -1,6 +1,9 @@
 class Admin::AnswersController < ApplicationController
     def index
-        @answers = Answer.all.paginate(page: params[:page], :per_page => 15).order("question_id ASC").order("id DESC")
+        @answers = Answer.all
+                         .order("id DESC")
+                         .order("question_id ASC")
+                         .paginate(page: params[:page], :per_page => 15)
       end
     
       # GET /answers/1
@@ -12,6 +15,11 @@ class Admin::AnswersController < ApplicationController
       # GET /answers/new
       def new
         @answer = Answer.new
+        if params[:question_id].nil?
+          @question = Question.all.collect {|p| [ p.question_content, p.id]}
+        else
+          @question = Question.where(id: params[:question_id]).collect {|p| [ p.question_content, p.id]}
+        end
       end
       
       def edit

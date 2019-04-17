@@ -47,8 +47,8 @@ window.onload = function () {
                                 <div class="ml-3">
                                     <% question.answers.each_with_index do |answer, j| %>
                                         <div class="form-check">
-                                            <label class="form-check-label" for="radio1">
-                                                <input type="radio" class="form-check-input" name="<%= "test[answer_ids][question_#{question.id}]" %>" value="<%= answer.id %>"><%= answer.answer_content %>
+                                            <label class="form-check-label" for="<%= "answer_#{answer.id}" %>">
+                                                <input type="radio" class="form-check-input" id="<%= "answer_#{answer.id}" %>" name="<%= "test[answer_ids][question_#{question.id}]" %>" value="<%= answer.id %>"><%= answer.answer_content %>
                                             </label>
                                         </div>
                                     <% end %>

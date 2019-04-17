@@ -1,32 +1,33 @@
-<h1>New Question</h1>
+<% provide(:button_text, 'Create') %>
+<div class="container mt-5">
+  <div class="row d-flex justify-content-center">
+    <div class="col-sm-12 col-md-8">
+      <h3>New Question</h3>
+      <%= form_with(model: @question, url: admin_questions_path, local: true) do |form| %>
+        <% if @question.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
 
-<%= form_with(model: @question, url: admin_questions_path, local: true) do |form| %>
-  <% if @question.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(question.errors.count, "error") %> prohibited this question from being saved:</h2>
+            <ul>
+            <% @question.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %> 
+        <div class="form-group">
+          <%= form.label :category_id %>
+          <%= select "question", "category_id", @categories, { include_blank: false }, { class: "form-control" } %>
+        </div>      
 
-      <ul>
-      <% question.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+        <div class="form-group">
+          <%= form.label :question_content %>
+          <%= form.text_area :question_content, class:'form-control' %>
+        </div>
+
+        <%= form.submit yield(:button_text), class: "btn btn-outline-primary" %>
+        <%= link_to 'Back', admin_questions_path, class: "btn btn-outline-warning" %>
       <% end %>
-      </ul>
     </div>
-  <% end %> 
-
- <div class="field">
-    <%= form.label :category_id %>
-    <%= form.text_field :category_id %>
   </div>
-
-  <div class="field">
-    <%= form.label :question_content %>
-    <%= form.text_field :question_content %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
-
-
-<%= link_to 'Back', admin_questions_path %>
+</div>
