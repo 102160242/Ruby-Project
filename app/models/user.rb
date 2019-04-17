@@ -33,4 +33,19 @@ class User < ApplicationRecord
     def unfollow(other_user)
       following.delete(other_user)
     end
+
+    def online?
+      if last_sign_in_at != nil && (Time.zone.now - last_sign_in_at) < 10*60
+        return true
+      end
+        # Check test activities
+        if tests.count > 0
+          return true if (Time.zone.now - tests.last.created_at) < 10*60
+        end
+      return false
+    end
+
+    def admin?
+      return admin
+    end
 end

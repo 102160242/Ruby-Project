@@ -2,23 +2,42 @@
 <div class="container">
   <h1 class="h1 mt-5">Profile</h2>
   <div class="row d-flex justity-content-center mt-5 row-eq-height">
-    <div class="col-sm-8">
+    <div class="col-sm-12 col-md-8">
       <div class ="card">
         <div class="card-header">
           <h3 class="card-header-title">Account info</h3>
         </div>
         <div class="card-body">
-          Thong tin ve user: so luong tu, follow....<br>
-          <button type="button" class="btn btn-outline-info">
-            Following <span class="badge badge-light"><%=  current_user.following.count %></span> users
-          </button>
-          <button type="button" class="btn btn-outline-warning">
-            Followers <span class="badge badge-light"><%=  current_user.followers.count %></span>
-          </button>
+          <div class="table-responsive">
+            <table class="table table-stripped">
+              <tbody>
+                <tr>
+                  <td>Joined</td>
+                  <td><%= @user.created_at %></td>
+                </tr>
+                <tr>
+                  <td>Learnt</td>
+                  <td><a class="badge badge-pill badge-primary p-2"><%= @user.words.count %> words</a></td>
+                </tr>
+                <tr>
+                  <td>Following</td>
+                  <td><a href="<%= following_user_path(@user) %>" class="badge badge-pill badge-info p-2"><%= @user.following.count %> users</a></td>
+                </tr>
+                <tr>
+                  <td>Followers</td>
+                  <td><a href="<%= followers_user_path(@user) %>" class="badge badge-pill badge-warning p-2"><%= @user.followers.count %> users</a></td>
+                </tr>
+                <tr>
+                  <td>Tests</td>
+                  <td><a class="badge badge-pill badge-success p-2"><%= @user.tests.count %></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-12 col-md-4">
       <div class ="card">
         <div class="card-header">
           <h3 class="card-header-title">Change password</h3>

@@ -1,0 +1,29 @@
+<div class="container mt-5">
+    <!-- Body -->
+    <div class="header-body mt-n5 mt-md-n6">
+        <div class="row align-items-end">
+        <div class="col-auto">               
+            <!-- Avatar -->
+            <div class="avatar avatar-xxl header-avatar-top">
+            <img src="<%= gravatar_url(@user.email, 50) %>" alt="" class="avatar-img rounded-circle border border-4 border-body">
+            </div>
+
+        </div>
+        <div class="col mb-3 ml-n3 ml-md-n2">
+            <!-- Pretitle -->
+            <h6 class="header-pretitle">
+            Members
+            </h6>
+            <!-- Title -->
+            <h4 class="header-title">
+            <%= @user.name %>
+            </h4>
+        </div>
+        <div class="col-12 col-md-auto mt-2 mt-md-0 mb-md-3">
+            <%= if user_signed_in? && current_user != @user
+                render 'follow_form'
+            end%>
+        </div>
+        </div> <!-- / .row -->
+    </div> <!-- / .header-body -->
+</div>

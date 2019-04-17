@@ -36,17 +36,27 @@
             <h6 class="card-title text-uppercase text-muted mb-2">
             Category
             </h6>
-            <div class="row align-items-center no-gutters">
+            <div class="row d-flex justify-content-between no-gutters">
+            <div class="col-auto">
+                <!-- Heading -->
+                <span class="h3 mr-2 mb-0">
+                <%= link_to test.category.name, learn_path(test.category), style: "text-decoration:none" %><br>
+                </span>                    
+            </div>
             <div class="col-auto">
                 <!-- Heading -->
                 <span class="h2 mr-2 mb-0">
-                <%= link_to test.category.name, learn_path(test.category), style: "text-decoration:none" %><br>
+                    <% if test.category.image.attached? %>
+                    <%= image_tag test.category.image.variant(resize: "100x100"), class: "card-img-top img-thumbnail img-fluid" %>
+                    <% else %>
+                    <%= image_tag "no-image.png", class: "card-img-top img-thumbnail img-fluid", style: "max-width: 100px;max-height:100px" %>
+                    <% end %>
                 </span>                    
             </div>
             </div> <!-- / .row -->
         </div>
+        <div class="col-auto">
         <% if !defined?(show_tested_time).nil? && show_tested_time %>
-        <div class="col">
             <!-- Title -->
             <h6 class="card-title text-uppercase text-muted mb-2">
             Tested Time
@@ -54,13 +64,15 @@
             <div class="row align-items-center no-gutters">
                 <div class="col-auto">
                     <!-- Heading -->
-                    <span class="h2 mr-2 mb-0">
+                    <span class="h3 mr-2 mb-0">
                     <%= test.created_at %>
                     </span>                    
                 </div>
             </div> <!-- / .row -->
-        </div>
+        <% else %>
+            <%= link_to "Result", test_path(test), class: "btn btn-outline-info" %>
         <% end %>
+        </div>
         </div> <!-- / .row -->
     </div>
 </div>

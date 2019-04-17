@@ -1,13 +1,13 @@
 <% provide(:title, "Test Result") %>
 <div class="containter">
   <div class="row d-flex justify-content-center mt-5">
-    <div class="col-md-8">
+    <div class="col-md-9 col-lg-6">
       <div class="card">
         <div class="card-header">
           <h4>Result</h4>
         </div>
         <div class="card-body">
-          <%= render 'result', test: @test %>
+          <%= render 'result', test: @test, show_tested_time: true %>
         </div>
       </div>
       <div class="card mt-4">

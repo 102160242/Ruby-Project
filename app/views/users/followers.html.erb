@@ -1,0 +1,55 @@
+<% provide(:title, "Followers")%>
+<%= render partial: "user_header" %>
+<div class="container mt-4">
+    <span class="h3">Total </span> <span class="badge badge-pill badge-info p-2"><%= @followers.count %></span>
+    <div class="row d-flex" id="list">
+        <% @followers.each do |f| %>
+        <div class="col-sm-9 col-md-8 col-lg-6">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-left">
+                    <div class="col-auto">
+                        
+                        <!-- Avatar -->
+                        <a href="<%= user_path(f) %>" class="avatar avatar-lg">
+                        <img src="<%= gravatar_url(f.email, 50) %>" alt="" class="avatar-img rounded-circle">
+                        </a>
+
+                    </div>
+                    <div class="col ml-n2">
+                        
+                        <!-- Title -->
+                        <h4 class="card-title mb-1">
+                        <a href="<%= user_path(f) %>"><%= f.name %></a>
+                        </h4>
+
+                        <!-- Text -->
+                        <p class="card-text small text-muted mb-1">
+                        <% if f.tests.count == 0 %>
+                            Never done any test
+                        <% else %>
+                            Has done <%= f.tests.count %> tests so far
+                        <% end %>
+                        </p>
+
+                        <!-- Status -->
+                        <p class="card-text small">
+                        <% if f.online? %>
+                            <span class="text-success">●</span> Online
+                        <% else %>
+                            <span class="text-default">●</span> Offline
+                        <% end %>
+                        </p>
+
+                    </div>
+                    <div class="col-auto">            
+
+                    </div>
+                    </div> <!-- / .row -->
+                </div> <!-- / .card-body -->
+                </div>
+            </div>
+        <% end %>
+    </div>
+    <div class="mt-5"><%= will_paginate @followers %></div>
+</div>

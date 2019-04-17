@@ -26,7 +26,14 @@ Rails.application.routes.draw do
       get 'do', to: 'tests#edit'
     end
   end
-  resources :users, only: :show
+
+  resources :users, only: :show do
+    member do
+      get 'following', to: 'users#following'
+      get 'followers', to: 'users#followers'
+    end
+  end
+
   namespace :admin do
     resources :categories
     resources :words
