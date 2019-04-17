@@ -16,6 +16,7 @@
 <% end %>
 <div class="container">
   <div class="row d-flex justity-content-center mt-5">
+  <%= link_to "New Word", new_admin_word_path, class: "btn btn-success mt-3 mb-3" %>
     <div class="col-12">
     <div class="table responsive">
         <table class="table">
@@ -41,6 +42,7 @@
                     </td>
                     <td>
                       <%= link_to "Edit", edit_admin_word_path(word) %>
+                      <%= link_to "Show", admin_word_path(word)%>
                       <%= link_to "Destroy", admin_word_path(word), method: :delete, data: { confirm: 'Are you sure?' } %>
                     <td> 
                   </tr>               

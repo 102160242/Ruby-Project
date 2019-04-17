@@ -1,6 +1,12 @@
-<h1>Editing Word</h1>
 
-<%= render 'form', word: @word %>
-
-<%= link_to 'Show', admin_word_path %> |
-<%= link_to 'Back', admin_words_path %>
+<% provide(:button_text, 'Save changes') %>
+<div class="container">
+    <h1>Editing Word</h1>
+    <div class="col-md-6   ">
+        <%= render 'form', word: @word %>
+        <td>
+            <%= link_to 'Show', admin_word_path, :class => "btn btn-outline-info mt-3 " %> 
+            <%= link_to 'Back', admin_words_path, :class=>"btn btn-outline-warning mt-3" %>
+        </td>
+    </div>
+</div>

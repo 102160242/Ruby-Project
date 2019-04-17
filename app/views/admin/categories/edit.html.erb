@@ -1,6 +1,13 @@
-<h1>Editing Category</h1>
-
-<%= render 'form', category: @category %>
-
-<%= link_to 'Show', admin_category_path %> |
-<%= link_to 'Back', admin_categories_path %>
+<% provide(:button_text, 'Save changes') %>
+<div class="container mt-3">
+    <div class="row d-flex justify-content-center">
+    <div class="col-sm-12 col-md-8">
+        <h3>Editing Category</h3>
+        <%= render 'form', category: @category %>
+        <td>
+            <%= link_to 'Show', admin_category_path, :class => "btn btn-outline-info mt-3 " %> 
+            <%= link_to 'Back', admin_categories_path, :class=>"btn btn-outline-warning mt-3" %>
+        </td>
+    </div>
+    </div>
+</div>

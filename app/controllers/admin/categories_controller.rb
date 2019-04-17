@@ -58,11 +58,20 @@ class Admin::CategoriesController < ApplicationController
   # DELETE /categories/1.json
   def destroy
     @category = Category.find(params[:id])
+    @category.destroy
     respond_to do |format|
-      format.html { redirect_to admin_categories_url, notice: 'Category was successfully destroyed.' }
-      format.json { head :no_content }
+        format.html { redirect_to admin_categories_path, notice: 'Category was successfully destroyed.' }
+        format.json { head :no_content }
     end
   end
+  #def destroy
+    #@category = Category.find(params[:id])
+    #@category.destroy
+    #respond_to do |format|
+     # format.html { redirect_to admin_categories_url, notice: 'Category was successfully destroyed.' }
+      #format.json { head :no_content }
+    #end
+  #end
 
   private
     # Use callbacks to share common setup or constraints between actions.

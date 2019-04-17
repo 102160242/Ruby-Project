@@ -1,15 +1,23 @@
-<p id="notice"><%= notice %></p>
+<div class="container mt-3">
+    <div class="row d-flex justify-content-center">
+      <div class="col-sm-12 col-md-8">
+        <h3>Categories</h3>
+        <p>
+          <strong>Name:</strong>
+          <%= @category.name %>
+        </p>
+        <p>
+            <strong>Image:</strong>
+          <% if @category.image.attached? %> <br />
+          <%= image_tag @category.image.variant(resize: "300x300"), class: "img-thumbnail" %>
+          <%end%>
+        </p>
+      </div>
+      <div class="col-sm-12 col-md-8">
+        <%= link_to 'Edit', edit_admin_category_path(@category),:class => "btn btn-outline-info"  %> 
+        <%= link_to 'Back', admin_categories_path, :class => "btn btn-outline-danger" %>
+      </div>
+    </div>
+</div>
 
-<p>
-  <strong>Name:</strong>
-  <%= @category.name %>
-</p>
-<p>
-  <strong>Image:</strong>
-  <% if @category.image.attached? %>
-  <%= image_tag @category.image.variant(resize: "300x300") %>
-  <%end%>
-</p>
 
-<%= link_to 'Edit', edit_admin_category_path(@category) %> |
-<%= link_to 'Back', admin_categories_path %>
