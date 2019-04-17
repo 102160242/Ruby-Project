@@ -10,23 +10,15 @@
       </ul>
     </div>
   <% end %>
+      <%= form.label :question_id %>
+      <%= form.text_field :question_id, class:'form-control' %>
 
-  <div class="field">
-    <%= form.label :question_id %>
-    <%= form.text_field :question_id %>
-  </div>
+      <%= form.label :answer_content %>
+      <%= form.text_area :answer_content, class:'form-control' %>
+      
+      <%= form.label :right_answer %>
+      <%= form.check_box :right_answer %>
+      <br/>
 
-  <div class="field">
-    <%= form.label :answer_content %>
-    <%= form.text_area :answer_content %>
-  </div>
-
-  <div class="field">
-    <%= form.label :right_answer %>
-    <%= form.check_box :right_answer %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+    <%= form.submit yield(:button_text), class: "btn btn-outline-primary" %>
 <% end %>

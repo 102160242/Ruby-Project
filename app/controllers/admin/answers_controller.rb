@@ -1,6 +1,6 @@
 class Admin::AnswersController < ApplicationController
     def index
-        @answers = Answer.all
+        @answers = Answer.all.paginate(page: params[:page], :per_page => 15).order("question_id ASC").order("id DESC")
       end
     
       # GET /answers/1
@@ -32,7 +32,7 @@ class Admin::AnswersController < ApplicationController
     
         respond_to do |format|
           if @answer.save
-            format.html { redirect_to @answer, notice: 'Answer was successfully created.' }
+            format.html { redirect_to admin_answers_path, notice: 'Answer was successfully created.' }
             format.json { render :show, status: :created, location: @answer }
           else
             format.html { render :new }

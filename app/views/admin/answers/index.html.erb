@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %></p>
+<!--<p id="notice"><%= notice %></p>
 
 <h1>Answers</h1>
 
@@ -29,3 +29,37 @@
 <br>
 
 <%= link_to 'New Answer', new_admin_answer_path %>
+-->
+<%= provide(:title, "Answers") %>
+<div class="container">
+    <h1 class="h1 mt-5">Answers</h1>
+    <div class="row d-flex justify-content-between">
+    <%= link_to 'New Answer', new_admin_answer_path, class: "btn btn-outline-success mt-3 mb-3" %>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <th>Question</th>
+                <th>Answer content</th>
+                <th>Right answer</th>
+                <th>Actions</th>
+            </thead>
+            <tbody>
+                <% @answers.each do |answer| %>
+                <tr>
+                  <td><%= answer.question_id %></td>
+                  <td><%= answer.answer_content %></td>
+                  <td><%= answer.right_answer %></td>
+                  <td>
+                    <%= link_to  'Show', admin_answer_path(answer),:class => "btn btn-outline-info" %>
+                    <%= link_to 'Edit', edit_admin_answer_path(answer),:class => "btn btn-outline-warning" %>
+                    <%= link_to 'Destroy', admin_answer_path(answer), method: :delete, data: { confirm: 'Are you sure?' },:class => "btn btn-outline-danger" %>
+                  </td>
+                </tr>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    <div class="mt-5"><%= will_paginate @answers %></div>
+</div>

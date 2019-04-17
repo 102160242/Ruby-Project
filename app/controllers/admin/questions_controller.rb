@@ -1,9 +1,9 @@
 class Admin::QuestionsController < ApplicationController
-  before_action :set_question, only: [:show, :edit, :update, :destroy]
+  #before_action :set_question, only: [:show, :edit, :update, :destroy]
     # GET /questions
   # GET /questions.json
   def index
-    @questions = Question.all.paginate(page: params[:page], :per_page => 15)
+    @questions = Question.all
   end
 
   # GET /questions/1
@@ -29,7 +29,7 @@ class Admin::QuestionsController < ApplicationController
 
     respond_to do |format|
       if @question.save
-        format.html { redirect_to @question, notice: 'Question was successfully created.' }
+        format.html { redirect_to admin_question_path(@question), notice: 'Question was successfully created.' }
         format.json { render :show, status: :created, location: @question }
       else
         format.html { render :new }
@@ -43,7 +43,7 @@ class Admin::QuestionsController < ApplicationController
   def update
     respond_to do |format|
       if @question.update(question_params)
-        format.html { redirect_to @question, notice: 'Question was successfully updated.' }
+        format.html { redirect_to admin_question_path, notice: 'Question was successfully updated.' }
         format.json { render :show, status: :ok, location: @question }
       else
         format.html { render :edit }
@@ -71,6 +71,6 @@ class Admin::QuestionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def question_params
-      params.require(:question).permit(:question_content)
+      params.require(:question).permit(:question_content, :category_id)
     end
 end
