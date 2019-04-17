@@ -8,7 +8,7 @@ class TestsController < ApplicationController
       render file: Rails.public_path.join("404.html"), layout: false
     else
       if @test.created_at != @test.updated_at
-        redirect_to learn_path(@test.category)
+        redirect_to @test
       end
     end
   end
@@ -46,31 +46,40 @@ class TestsController < ApplicationController
   # PATCH/PUT /tests/1
   # PATCH/PUT /tests/1.json
   def update
-    begin
-      answers = params[:test][:answer_ids]
-      score = 0
-      @test.questions.each do |question|
-        ans = answers["question_#{question.id}"]
-        if !ans.nil?
-          if question.answers.where("answers.id = #{ans.to_i}").first.right_answer
-            score = score + 1
+    if @test.created_at != @test.updated_at 
+      respond_to do |format|
+        format.html { redirect_to @test, notice: "Cheating activity is not allowed! You has done this test!" } # Action is not allowed
+      end
+    else
+      begin
+        answers = params[:test][:answer_ids]
+        score = 0
+        @test.questions.each do |question|
+          ans = answers["question_#{question.id}"]
+          if !ans.nil?
+            if question.answers.where("answers.id = #{ans.to_i}").first.right_answer
+              score = score + 1
+            end
+            ## Update Chosen Answer ID ##
+            QuestionsTest.where(:question_id => question.id, :test_id => @test.id)
+                        .update_all(:chosen_answer_id => ans.to_i)
           end
-          ## Update Chosen Answer ID ##
-          QuestionsTest.where(:question_id => question.id, :test_id => @test.id)
-                      .update_all(:chosen_answer_id => ans.to_i)
-          ## Save Score ##
-          @test.score = score
-          @test.save
         end
-      end
-      respond_to do |format|
-        format.html { redirect_to @test }
-        format.json { render :show, status: :ok, location: @test }
-      end
-    rescue
-      respond_to do |format|
-        format.html { render :edit, notice: "Please do you test again. An unexpected error has occured!" }
-        format.json { render json: @test.errors, status: :unprocessable_entity }
+        ## Save Score ##
+        @test.score = score
+        @test.save
+
+        respond_to do |format|
+          format.html { redirect_to @test }
+          format.json { render :show, status: :ok, location: @test }
+        end
+      rescue
+        @test.score = 0
+        @test.save
+        respond_to do |format|
+          format.html { redirect_to @test }
+          format.json { render json: @test.errors, status: :unprocessable_entity }
+        end
       end
     end
   end

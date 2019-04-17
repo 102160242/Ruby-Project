@@ -1,13 +1,44 @@
 <%= provide(:title, "Do test about #{@test.category.name}") %>
+<% content_for :header do %>
+<script>
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10)
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            timer = duration;
+            // Nop bai 
+            $("#test_form").submit();
+        }
+    }, 1000);
+}
+
+window.onload = function () {
+    var timeleft = <%= 10*60 - (Time.zone.now - @test.created_at) %>,
+        display = document.querySelector('#timer');
+    startTimer(timeleft, display);
+};
+</script>
+<% end %>
 <div class="container mt-5">
     <div class="card border-bottom-primary">
-        <%= form_for :test, url: test_path(@test), method: :patch do |f| %>
+        <%= form_for :test, url: test_path(@test), method: :patch, html: {id: "test_form"} do |f| %>
             <div class="card-header border-primary">
                 <h5 class="card-header-title">Do your test by answering the questions bellow</h5>
             </div>
             <div class="card-body bg-transparent border-primary">
                 <div class="row">
                     <div class="col">
+                        <div class="mb-3 h4 text-right" id="">
+                            <div>Time left <span id="timer">10:00</span> minutes!</div>
+                        </div>
                         <% @test.questions.each_with_index do |question, i| %>
                             <div class="m-1 border-1">
                                 <span class="text-info font-weight-bold">
