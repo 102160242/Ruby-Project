@@ -1,12 +1,14 @@
 <% provide(:button_text, 'Save changes') %>
 <% provide(:title, 'Edit answer') %>
-<div class="container">
-    <h1>Editing Answer</h1>
-    <div class="col-md-6   ">
-        <%= render 'form', answer: @answer %>
-        <td>
-            <%= link_to 'Show', admin_answer_path(@answer), :class => "btn btn-outline-info" %> 
-            <%= link_to 'Back', admin_answers_path, :class=>"btn btn-outline-warning" %>
-        </td>
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-sm-9 col-md-6">
+            <h3>Editing Answer</h3>
+            <%= render 'form', answer: @answer %>
+            <td>
+                <%= link_to 'Show', admin_answer_path(@answer), :class => "btn btn-outline-info" %> 
+                <%= link_to 'Back', admin_answers_path, :class=>"btn btn-outline-warning" %>
+            </td>
+        </div>
     </div>
 </div>

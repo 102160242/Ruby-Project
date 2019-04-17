@@ -4,8 +4,10 @@ class Admin::QuestionsController < ApplicationController
   # GET /questions.json
   def index
     @questions = Question.all
+                         .order("id DESC")
+                         .order("category_id ASC")
+                         .paginate(page: params[:page], :per_page => 15)
   end
-
   # GET /questions/1
   # GET /questions/1.json
   def show
@@ -15,6 +17,7 @@ class Admin::QuestionsController < ApplicationController
   # GET /questions/new
   def new
     @question = Question.new
+    @categories = Category.all.collect {|p| [ p.name, p.id]}
   end
 
   # GET /questions/1/edit

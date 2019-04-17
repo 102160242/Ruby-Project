@@ -1,6 +1,14 @@
-<h1>Editing Question</h1>
-
-<%= render 'form', question: @question %>
-
-<%= link_to 'Show', admin_question_path(@question) %> |
-<%= link_to 'Back', admin_question_path %>
+<% provide(:button_text, 'Save changes') %>
+<% provide(:title, 'Edit question') %>
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-sm-9 col-md-6">
+            <h3>Editing Question</h3>
+                <%= render 'form', question: @question %>
+            <td>
+                <%= link_to 'Show', admin_question_path(@question), :class => "btn btn-outline-info mt-2" %> 
+                <%= link_to 'Back', admin_questions_path, :class=>"btn btn-outline-warning mt-2" %>
+            </td>
+        </div>
+    </div>
+</div>

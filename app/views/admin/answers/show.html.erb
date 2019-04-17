@@ -1,19 +1,25 @@
-<p id="notice"><%= notice %></p>
+<div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-sm-9 col-md-6">
+            <h1>Infomation</h1>
+            <p>
+              <strong>Question:</strong>
+              <%= @answer.question_id %>
+            </p>
 
-<p>
-  <strong>Question:</strong>
-  <%= @answer.question_id %>
-</p>
+            <p>
+              <strong>Answer content:</strong>
+              <%= @answer.answer_content %>
+            </p>
 
-<p>
-  <strong>Answer content:</strong>
-  <%= @answer.answer_content %>
-</p>
-
-<p>
-  <strong>Right answer:</strong>
-  <%= @answer.right_answer %>
-</p>
-
-<%= link_to 'Edit', edit_admin_answer_path(@answer) %> |
-<%= link_to 'Back', admin_answers_path %>
+            <p>
+              <strong>Right answer:</strong>
+              <%= @answer.right_answer %>
+            </p>
+            <td>
+                <%= link_to 'Edit', edit_admin_answer_path(@answer), :class => "btn btn-outline-info" %> 
+                <%= link_to 'Back', admin_answers_path, :class => "btn btn-outline-warning" %>
+            </td>
+        </div>
+    </div>
+</div>
