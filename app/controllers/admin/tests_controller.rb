@@ -1,4 +1,5 @@
 class Admin::TestsController < ApplicationController
+  layout "admin/layouts/application"
     before_action :authenticate_user!, only: [:create, :edit, :update]
     before_action :set_test, only: [:show, :edit, :update, :destroy]
   

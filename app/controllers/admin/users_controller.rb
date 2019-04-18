@@ -1,4 +1,5 @@
 class Admin::UsersController < ApplicationController
+    layout "admin/layouts/application"
     before_action :set_user, only: [:show, :edit, :update, :destroy]
     
     # GET /users

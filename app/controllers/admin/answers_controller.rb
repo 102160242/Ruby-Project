@@ -1,4 +1,5 @@
 class Admin::AnswersController < ApplicationController
+    layout "admin/layouts/application"
     def index
         @answers = Answer.all
                          .order("id DESC")

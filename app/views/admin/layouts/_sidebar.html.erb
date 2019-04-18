@@ -1,0 +1,91 @@
+<a id="show-sidebar" class="btn btn-sm btn-dark" href="#">
+  <i class="fas fa-bars"></i>
+</a>
+<nav id="sidebar" class="sidebar-wrapper">
+  <div class="sidebar-content">
+    <div class="sidebar-brand">
+      <a href="<%= root_url %>">Home</a>
+      <!--<div id="close-sidebar">
+        <i class="fas fa-times"></i>
+      </div>-->
+    </div>
+    <div class="sidebar-header">
+      <div class="user-pic">
+        <img class="img-responsive img-rounded" src="<%= gravatar_url(current_user.email, 40) %>"
+          alt="User picture">
+      </div>
+      <div class="user-info">
+        <span class="user-name"><%= current_user.name %>
+        </span>
+        <span class="user-email"><%= current_user.email %></span>
+        <span class="user-status">
+          <i class="fa fa-circle"></i>
+          <span>Online</span>
+        </span>
+      </div>
+    </div>
+    <!-- sidebar-header  -->
+    <!--<div class="sidebar-search">
+      <div>
+        <div class="input-group">
+          <input type="text" class="form-control search-menu" placeholder="Search...">
+          <div class="input-group-append">
+            <span class="input-group-text">
+              <i class="fa fa-search" aria-hidden="true"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>-->
+    <!-- sidebar-search  -->
+    <div class="sidebar-menu">
+      <ul>
+        <li class="header-menu">
+          <span>General</span>
+        </li>
+        <li class="">
+          <a href="<%= admin_users_path %>">
+            <i class="fa fa-user"></i>
+            <span>Users</span>
+          </a>
+        </li>
+        <li class="">
+          <a href="<%= admin_categories_path %>">
+            <i class="fas fa-atlas"></i>
+            <span>Categories</span>
+          </a>
+        </li>
+        <li class="">
+          <a href="<%= admin_words_path %>">
+            <i class="far fa-file-word"></i>
+            <span>Words</span>
+          </a>
+        </li>
+        <li class="">
+          <a href="<%= admin_questions_path %>">
+            <i class="far fa-question-circle"></i>
+            <span>Questions</span>
+          </a>
+        </li>
+        <li class="">
+          <a href="<%= admin_answers_path %>">
+            <i class="fas fa-font"></i>          
+            <span>Answers</span>
+          </a>
+        </li>
+        <li class="">
+          <a href="<%= admin_tests_path %>">
+            <i class="fas fa-file-alt"></i>
+            <span>Tests</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- sidebar-menu  -->
+  </div>
+  <!-- sidebar-content  -->
+  <div class="sidebar-footer">
+    <%= link_to raw('<i class="fa fa-power-off"></i> Logout'), logout_path, method: "delete" %>
+  </div>
+</nav>
+<!-- sidebar-wrapper  -->
