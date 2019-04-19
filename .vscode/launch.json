@@ -19,8 +19,8 @@
             "request": "launch",
             "cwd": "${workspaceRoot}",
             "useBundler": true,
-            "pathToBundler": "/home/doanhuuhoa/.rbenv/shims/bundle",
-            "pathToRDebugIDE": "/home/doanhuuhoa/.rvm/gems/ruby-2.6.1/gems/ruby-debug-ide-0.6.1",
+            "pathToBundler": "/home/minhchien/.rbenv/shims/bundle",
+            "pathToRDebugIDE": "/home/minhchien/.rvm/gems/ruby-2.6.1/gems/ruby-debug-ide-0.6.1",
             "program": "${workspaceRoot}/bin/rails",
             "args": [
                 "server",
@@ -33,7 +33,7 @@
             "type": "Ruby",
             "request": "launch",
             "cwd": "${workspaceRoot}",
-            "program": "/home/doanhuuhoa/.rvm/gems/ruby-2.6.1/bin/rspec",
+            "program": "/home/minhchien/.rvm/gems/ruby-2.6.1/bin/rspec",
             "args": [
                 "--pattern",
                 "${workspaceRoot}/spec/**/*_rspec.rb"
@@ -45,10 +45,10 @@
             "request": "launch",
             "cwd": "${workspaceRoot}",
             "useBundler": true,
-            "pathToBundler": "/home/doanhuuhoa/.rbenv/shims/bundle",
-            "pathToRDebugIDE": "/home/doanhuuhoa/.rvm/gems/ruby-2.6.1/gems/ruby-debug-ide-0.6.1",
+            "pathToBundler": "/home/minhchien/.rbenv/shims/bundle",
+            "pathToRDebugIDE": "/home/minhchien/.rbenv/versions/2.6.1/lib/ruby/gems/2.6.0/gems/ruby-debug-ide-0.6.1",
             "debuggerPort": "1235",
-            "program": "/home/doanhuuhoa/.rvm/gems/ruby-2.6.1/bin/rspec",
+            "program": "/home/minhchien/.rvm/gems/ruby-2.6.1/bin/rspec",
             "args": [
                 "${file}"
             ]

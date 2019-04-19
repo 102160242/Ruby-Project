@@ -7,7 +7,12 @@ class Admin::CategoriesController < ApplicationController
   # GET /categories
   # GET /categories.json
   def index
-    @categories = Category.all.paginate(page: params[:page], :per_page => 6)
+    #@categories = Category.all.paginate(page: params[:page], :per_page => 6)
+    @search_key = (params[:search_key].nil? || params[:search_key] == "") ? "" : params[:search_key]
+    @order = (params[:order].nil? || params[:order] == "") ? "" : params[:order]
+    @categories = Category.search(@search_key)
+                          .order("name #{@order == "za" ? "DESC" : "ASC"}")
+                          .paginate(page: params[:page], :per_page => 6)
   end
 
   # GET /categories/1
@@ -47,7 +52,7 @@ class Admin::CategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @category.update(category_params)
-        format.html { redirect_to @category, notice: 'Category was successfully updated.' }
+        format.html { redirect_to admin_category_path, notice: 'Category was successfully updated.' }
         format.json { render :show, status: :ok, location: @category }
       else
         format.html { render :edit }
