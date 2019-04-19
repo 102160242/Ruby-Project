@@ -1,41 +1,68 @@
-<!--<p id="notice"><%= notice %></p>
-
-<h1>Categories</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @categories.each do |category| %>
-      <tr>
-        <td><%= category.name %></td>
-        <td><%= link_to 'Show', category %></td>
-        <td><%= link_to 'Edit', edit_category_path(category) %></td>
-        <td><%= link_to 'Destroy', category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Category', new_category_path %>
--->
 <%= provide(:title, "Categories") %>
-<div class="container">
+<% content_for :header do %>
+<script>
+function updateQueryStringParameter(uri, key, value) {
+  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+  if (uri.match(re)) {
+    return uri.replace(re, '$1' + key + "=" + value + '$2');
+  }
+  else {
+    return uri + separator + key + "=" + value;
+  }
+}
+
+function searchAndFilter()
+{
+  var uri = window.location.href;
+  var search_key = $("#search_key").val();
+  var order = $("#order").val();
+  
+  // Update URL
+  uri = updateQueryStringParameter(uri, "page", 1); // Doi ve page 1 de tranh khong co tu khi so luong tu khong du paginate
+  uri = updateQueryStringParameter(uri, "search_key", search_key);
+  if(order == "az" || order == "za")
+    uri = updateQueryStringParameter(uri, "order", order);
+  window.location.replace(uri);
+}
+$(document).ready(function() {
+  // Chan user nhan phim enter
+  $('#searchAndFilterForm').submit(function(e) {
+    searchAndFilter();
+    e.preventDefault();
+    return false;
+  });
+});
+</script>
+<% end %>
+<div class="container-fluid">
     <h1 class="h1 mt-5">Categories</h1>
     <div class="row d-flex justify-content-between">
     <%= link_to "New Category", new_admin_category_path, class: "btn btn-success mt-3 mb-3" %>
+     <form class="form-inline align-items-center mb-3" id="searchAndFilterForm">
+      <div class="form-row align-items-center">
+        <div class="col-auto">
+          <label class="my-1 mr-2 d-inline" for="search_key">Search</label>
+          <input type="text" class="form-control mr-3 d-inline" id="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
+        </div>
+        <div class="col-auto">
+          <label class="my-1 mr-2 d-inline" for="order">Order</label>
+          <select class="custom-select mr-3 d-inline" id="order">
+            <option value="az" <%= "selected" if(@order == "az") %>>A-Z</option>
+            <option value="za" <%= "selected" if(@order == "za") %>>Z-A</option>
+          </select>
+        </div>
+        <div class="col-auto">
+          <button id="search" class="btn btn-primary mb-2">Submit</button>
+        </div>
+      </div>
+    </form>
     <div class="table-responsive">
         <table class="table">
             <thead>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Total Words</th>
                 <th>Image</th>
                 <th>Action</th>
             </thead>
@@ -44,6 +71,7 @@
                   <tr>
                     <td><%= category.id %></td>
                     <td><%= category.name %></td>
+                    <td><%= category.words.count %></td>
                     <td>
                       <% if category.image.attached? %>
                        <%= image_tag category.image.variant(resize: "100x100"), class: "card-img-top img-thumbnail" %> 
@@ -58,8 +86,6 @@
                 <% end %>
             </tbody>
         </table>
-    </div>
-    </div>
-
+      </div>
     <div class="mt-5"><%= will_paginate @categories %></div>
 </div>

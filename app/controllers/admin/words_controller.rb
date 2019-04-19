@@ -1,10 +1,23 @@
 class Admin::WordsController < ApplicationController
   layout "admin/layouts/application"
-  #before_action :set_word, only: [:show, :edit, :update, :destroy]
+  before_action :set_word, only: [:show, :edit, :update, :destroy]
   # GET /words
   # GET /words.json
   def index
-    @words = Word.all.paginate(page: params[:page], :per_page => 15)
+    @search_key = (params[:search_key].nil? || params[:search_key] == "") ? "" : params[:search_key]
+    @order = (params[:order].nil? || params[:order] == "") ? "" : params[:order]
+    @words = Word.search(@search_key)
+
+    if @order == "word_az"
+      @words = @words.order("words.word ASC")
+    elsif @order == "word_za"
+      @words = @words.order("words.word DESC")
+    elsif @order == "id_az"
+      @words = @words.order("words.id ASC")
+    else
+      @words = @words.order("words.id DESC")
+    end
+    @words = @words.paginate(page: params[:page], :per_page => 15)
   end
 
   # GET /words/1
@@ -17,21 +30,22 @@ class Admin::WordsController < ApplicationController
   # GET /words/new
   def new
     @word = Word.new
+    @categories = Category.all.collect {|p| [ p.name, p.id]}
   end
 
   # GET /words/1/edit
   def edit
     @word = Word.find(params[:id])
- 
+    @categories = Category.all.collect {|p| [ p.name, p.id]}
   end
 
   # POST /words
   # POST /words.json
   def create
     @word = Word.new(word_params)
-
     respond_to do |format|
       if @word.save
+        category_ids = params[:word][:category_ids].reject { |c| c.empty? }
         format.html { redirect_to admin_words_path, notice: 'Word was successfully created.' }
         format.json { render :show, status: :created, location: @word }
       else
@@ -74,6 +88,6 @@ class Admin::WordsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def word_params
-        params.require(:word).permit(:word, :meaning, :word_class, :image)
+        params.require(:word).permit(:word, :meaning, :word_class, :ipa, :image, :category_ids => [])
     end
 end

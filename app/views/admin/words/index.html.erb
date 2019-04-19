@@ -1,22 +1,72 @@
 
 <%= provide(:title, "Learn words about ") %>
-    <% content_for :header do %>
-  <script>
-    // $(document).ready(function() {
-    //   $('[id^=form_]')
-    //   .bind('ajax:success', function(evt, data, status, xhr) {
-    //     console.log(data);
-    //   })
-    //   .bind("ajax:error", function(evt, xhr, status, error) {
-    //     //function called on status: 401 or 500 (for ex.)
-    //     console.log(xhr.responseText);
-    //   });
-    // });
-  </script>
+<% content_for :header do %>
+<script>
+function updateQueryStringParameter(uri, key, value) {
+  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+  if (uri.match(re)) {
+    return uri.replace(re, '$1' + key + "=" + value + '$2');
+  }
+  else {
+    return uri + separator + key + "=" + value;
+  }
+}
+
+function searchAndFilter()
+{
+  var uri = window.location.href;
+  var search_key = $("#search_key").val();
+  var order = $("#order").val();
+  var filter = $("#filter").val();
+  
+  // Update URL
+  uri = updateQueryStringParameter(uri, "page", 1); // Doi ve page 1 de tranh khong co tu khi so luong tu khong du paginate
+  uri = updateQueryStringParameter(uri, "search_key", search_key);
+  if(order == "word_az" || order == "word_za" || order == "id_az" || order == "id_za")
+    uri = updateQueryStringParameter(uri, "order", order);
+  if(filter == "learnt" || filter == "unlearnt" || filter == "all")
+    uri = updateQueryStringParameter(uri, "filter", filter);
+
+  window.location.replace(uri);
+}
+$(document).ready(function() {
+  // Chan user nhan phim enter
+  $('#searchAndFilterForm').submit(function(e) {
+    searchAndFilter();
+    e.preventDefault();
+    return false;
+  });
+});
+</script>
 <% end %>
-<div class="container">
+<div class="container-fluid">
   <div class="row d-flex justity-content-center mt-5">
-  <%= link_to "New Word", new_admin_word_path, class: "btn btn-success mt-3 mb-3" %>
+    <div class="col-6">
+      <%= link_to "New Word", new_admin_word_path, class: "btn btn-success mt-3 mb-3" %>
+    </div>
+    <div class="col-6">
+    <form class="form-inline align-items-center mb-3" id="searchAndFilterForm">
+        <div class="form-row align-items-center">
+          <div class="col-auto">
+            <label class="my-1 mr-2 d-inline" for="search_key">Search</label>
+            <input type="text" class="form-control mr-3 d-inline" id="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
+          </div>
+          <div class="col-auto">
+            <label class="my-1 mr-2 d-inline" for="order">Order</label>
+            <select class="custom-select mr-3 d-inline" id="order">
+              <option value="id_az" <%= "selected" if(@order == "id_az") %>>ID A-Z</option>
+              <option value="id_za" <%= "selected" if(@order == "id_za") %>>ID Z-A</option>
+              <option value="word_az" <%= "selected" if(@order == "word_az") %>>Word A-Z</option>
+              <option value="word_za" <%= "selected" if(@order == "word_za") %>>Word Z-A</option>
+            </select>
+          </div>
+          <div class="col-auto">
+            <button id="search" class="btn btn-primary mb-2">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
     <div class="col-12">
     <div class="table responsive">
         <table class="table">
@@ -24,6 +74,7 @@
                 <th>ID</th>
                 <th>Word</th>
                 <th>Class</th>
+                <th>Categories</th>
                 <th>Meaning</th>
                 <th>Image</th>
                 <th>Action</th>
@@ -33,7 +84,12 @@
                   <tr>
                     <td><%= word.id %></td>
                     <td><%= word.word %></td>
-                    <td><%= word.word_class %></td>
+                    <td><%= Word.word_class_name(word.word_class) %></td>
+                    <td>
+                      <% word.categories.each do |c| %>
+                          <%= c.name + ", " %>
+                      <% end %>
+                    </td>
                     <td><%= word.meaning %></td>
                     <td>
                       <% if word.image.attached? %>
@@ -41,16 +97,16 @@
                       <% end %>
                     </td>
                     <td>
-                      <%= link_to "Edit", edit_admin_word_path(word) %>
-                      <%= link_to "Show", admin_word_path(word)%>
-                      <%= link_to "Destroy", admin_word_path(word), method: :delete, data: { confirm: 'Are you sure?' } %>
+                      <%= link_to "Edit", edit_admin_word_path(word), :class => "btn btn-outline-info mb-3" %>
+                      <%= link_to "Show", admin_word_path(word),:class => "btn btn-outline-warning mb-3"%>
+                      <%= link_to "Destroy", admin_word_path(word), method: :delete, data: { confirm: 'Are you sure?' },:class => "btn btn-outline-danger mb-3" %>
                     <td> 
                   </tr>               
                 <% end %>      
             </tbody>
         </table>
     </div>
-    <div class="mt-5"><%= will_paginate @words %></div>
+    <div class="mt-5"> <%= will_paginate @words %></div>
     </div>
 
 </div>
