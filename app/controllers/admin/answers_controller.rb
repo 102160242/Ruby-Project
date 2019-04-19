@@ -55,7 +55,7 @@ class Admin::AnswersController < ApplicationController
         respond_to do |format|
           if @answer.save
             format.html { redirect_to admin_answers_path, notice: 'Answer was successfully created.' }
-            format.json { render :show, status: :created, location: @answer }
+            format.json { render :show, status: :created, location: admin_answers_path }
           else
             format.html { render :new }
             format.json { render json: @answer.errors, status: :unprocessable_entity }
@@ -69,8 +69,8 @@ class Admin::AnswersController < ApplicationController
         @answer = Answer.find(params[:id])
         respond_to do |format|
           if @answer.update(answer_params)
-            format.html { redirect_to admin_answer_path, notice: 'Answer was successfully updated.' }
-            format.json { render :show, status: :ok, location: @answer }
+            format.html { redirect_to admin_answers_path, notice: 'Answer was successfully updated.' }
+            format.json { render :show, status: :ok, location: admin_answers_path }
           else
             format.html { render :edit }
             format.json { render json: @answer.errors, status: :unprocessable_entity }

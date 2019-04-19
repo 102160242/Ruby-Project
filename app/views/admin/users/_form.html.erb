@@ -1,25 +1,26 @@
-<%= form_with(model: [:admin, user], url:admin_user_path, local: true) do |form| %>
-    <% if user.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(user.errors.count, "error") %> prohibited this test from being saved:</h2>
-  
-        <ul>
-        <% @user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-        </ul>
+<%= form_with(model: [:admin, @user], local: true) do |form| %>
+      <% if @user.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+          <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div class="form-group">
+        <%= form.label :name %>
+        <%= form.text_field :name , class:'form-control' %>
       </div>
-    <% end %>
-        <%= form.label :user_id %>
-        <%= form.text_field :user_id, class:'form-control' %>
-  
+      <div class="form-group">
         <%= form.label :email %>
         <%= form.text_field :email, class:'form-control' %>
-        
+      </div>
+      <div class="form-group">
         <%= form.label :password %>
-        <%= form.text_field :password, class:'form-control'%>
-        <br/>
-  
+        <%= form.password_field :password, class:'form-control' %>
+      </div>
       <%= form.submit yield(:button_text), class: "btn btn-outline-primary" %>
-  <% end %>
-  
+    <% end %>

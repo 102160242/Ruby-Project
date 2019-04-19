@@ -1,6 +1,7 @@
 class Admin::QuestionsController < ApplicationController
   layout "admin/layouts/application"
   before_action :authenticate_user!, :admin_user
+  before_action :set_question, only: [:show, :edit, :update, :destroy]
   
   # GET /questions
   # GET /questions.json
@@ -46,8 +47,8 @@ class Admin::QuestionsController < ApplicationController
 
     respond_to do |format|
       if @question.save
-        format.html { redirect_to admin_question_path(@question), notice: 'Question was successfully created.' }
-        format.json { render :show, status: :created, location: @question }
+        format.html { redirect_to admin_questions_path, notice: 'Question was successfully created.' }
+        format.json { render :show, status: :created, location: admin_questions_path }
       else
         format.html { render :new }
         format.json { render json: @question.errors, status: :unprocessable_entity }
@@ -60,8 +61,8 @@ class Admin::QuestionsController < ApplicationController
   def update
     respond_to do |format|
       if @question.update(question_params)
-        format.html { redirect_to admin_question_path, notice: 'Question was successfully updated.' }
-        format.json { render :show, status: :ok, location: @question }
+        format.html { redirect_to admin_questions_path, notice: 'Question was successfully updated.' }
+        format.json { render :show, status: :ok, location: admin_questions_path }
       else
         format.html { render :edit }
         format.json { render json: @question.errors, status: :unprocessable_entity }

@@ -3,32 +3,7 @@
 <div class="container">
   <h1>New Users</h1>
   <div class="col-md-6   ">
-    <%= form_with(model: @user,url:admin_users_path, local: true) do |form| %>
-      <% if @user.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
-          <ul>
-          <% @user.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-          </ul>
-        </div>
-      <% end %>
-      <div class="form-group">
-        <%= form.label :name %>
-        <%= form.text_field :name , class:'form-control' %>
-      </div>
-      <div class="form-group">
-        <%= form.label :email %>
-        <%= form.text_field :email, class:'form-control' %>
-      </div>
-      <div class="form-group">
-        <%= form.label :password %>
-        <%= form.password_field :password, class:'form-control' %>
-      </div>
-      <%= form.submit yield(:button_text), class: "btn btn-outline-primary" %>
-    <% end %>
+    <%= render 'form', user: @user %>
     <%= link_to 'Back', admin_users_path, class: "btn btn-outline-warning" %>
   </div>
 </div>

@@ -37,8 +37,8 @@ class Admin::TestsController < ApplicationController
                               .first(20)
           @test.questions << @questions
   
-          format.html { redirect_to do_test_path(@test) }
-          format.json { render :edit, status: :created, location: do_test_path(@test) }
+          format.html { redirect_to admin_tests_path }
+          format.json { render :edit, status: :created, location: admin_tests_path }
           format.js {}
         end
   

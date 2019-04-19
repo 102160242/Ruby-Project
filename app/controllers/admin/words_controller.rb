@@ -47,7 +47,7 @@ class Admin::WordsController < ApplicationController
       if @word.save
         category_ids = params[:word][:category_ids].reject { |c| c.empty? }
         format.html { redirect_to admin_words_path, notice: 'Word was successfully created.' }
-        format.json { render :show, status: :created, location: @word }
+        format.json { render :show, status: :created, location: admin_words_path }
       else
         format.html { render :new }
         format.json { render json: @word.errors, status: :unprocessable_entity }
@@ -61,7 +61,7 @@ class Admin::WordsController < ApplicationController
     respond_to do |format|
       if @word.update(word_params)
         format.html { redirect_to admin_words_path, notice: 'Word was successfully updated.' }
-        format.json { render :show, status: :ok, location: @word }
+        format.json { render :show, status: :ok, location: admin_words_path }
       else
         format.html { render :edit }
         format.json { render json: @word.errors, status: :unprocessable_entity }
