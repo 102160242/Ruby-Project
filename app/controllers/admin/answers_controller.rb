@@ -1,12 +1,24 @@
 class Admin::AnswersController < ApplicationController
     layout "admin/layouts/application"
+    before_action :authenticate_user!, :admin_user
     def index
       @search_key = (params[:search_key].nil? || params[:search_key] == "") ? "" : params[:search_key]
       @order = (params[:order].nil? || params[:order] == "") ? "" : params[:order]
       @answers = Answer.search(@search_key)
-                   .order("answer_content #{@order == "za" ? "DESC" : "ASC"}")
-                   .paginate(page: params[:page], :per_page => 15)
+                 
+      # Sap xep
+      if @order == "answer_az"
+          @answers = @answers.order("answer_content ASC")
+      elsif @order == "answer_za"
+          @answers = @answers.order("answer_content DESC")
+      elsif @order == "id_az"
+          @answers = @answers.order("id ASC")
+      else
+          @answers = @answers.order("id DESC") # Mac dinh sap xep theo ID tang dan
       end
+
+      @answers = @answers.paginate(page: params[:page], :per_page => 15)
+    end
     
       # GET /answers/1
       # GET /answers/1.json

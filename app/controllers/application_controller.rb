@@ -13,4 +13,8 @@ class ApplicationController < ActionController::Base
     def show_404_error
       render file: Rails.public_path.join("404.html"), layout: false
     end
+
+    def admin_user
+      show_404_error unless current_user.admin?
+    end 
 end

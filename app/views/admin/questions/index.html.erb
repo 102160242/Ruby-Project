@@ -21,7 +21,7 @@ function searchAndFilter()
   // Update URL
   uri = updateQueryStringParameter(uri, "page", 1); // Doi ve page 1 de tranh khong co tu khi so luong tu khong du paginate
   uri = updateQueryStringParameter(uri, "search_key", search_key);
-  if(order == "az" || order == "za")
+  if(order == "id_az" || order == "id_za" || order == "question_az" || order == "question_za")
     uri = updateQueryStringParameter(uri, "order", order);
   window.location.replace(uri);
 }
@@ -48,8 +48,10 @@ $(document).ready(function() {
           <div class="col-auto">
             <label class="my-1 mr-2 d-inline" for="order">Order</label>
             <select class="custom-select mr-3 d-inline" id="order">
-             <option value="az" <%= "selected" if(@order == "az") %>>A-Z</option>
-             <option value="za" <%= "selected" if(@order == "za") %>>Z-A</option>
+             <option value="question_az" <%= "selected" if(@order == "question_az") %>>Question A-Z</option>
+             <option value="question_za" <%= "selected" if(@order == "question_za") %>>Question Z-A</option>
+             <option value="id_az" <%= "selected" if(@order == "id_az") %>>ID A-Z</option>
+             <option value="id_za" <%= "selected" if(@order == "id_za") %>>ID Z-A</option>
             </select>
           </div>
           <div class="col-auto">
@@ -60,6 +62,7 @@ $(document).ready(function() {
     <div class="table-responsive">
         <table class="table">
             <thead>
+                <th>ID</th>
                 <th>Category</th>
                 <th>Question content</th>
                 <th>Actions</th>
@@ -67,6 +70,7 @@ $(document).ready(function() {
             <tbody>
                   <% @questions.each do |question| %>
                   <tr>
+                    <td><%= question.id %></td>
                     <td><%= link_to question.category.name, admin_category_path(question.category) %></td>
                     <td style="width: 40rem;"><%= question.question_content %></td>
                     <td>
@@ -81,5 +85,5 @@ $(document).ready(function() {
     </div>
     </div>
 
-    <div class="mt-5"><%= will_paginate @answers %></div>
+    <div class="mt-5"><%= will_paginate @questions %></div>
 </div>

@@ -1,6 +1,8 @@
 class Admin::CategoriesController < ApplicationController
-    before_action :set_category, only: [:show, :edit, :update, :destroy]
-    layout "admin/layouts/application"
+  layout "admin/layouts/application"
+
+  before_action :set_category, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, :admin_user
     
   # GET /categories
   # GET /categories.json

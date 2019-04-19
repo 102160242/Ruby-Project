@@ -1,11 +1,11 @@
 class Question < ApplicationRecord
     has_and_belongs_to_many :tests
-    has_many :answers, dependent: :delete_all
+    has_many :answers, dependent: :destroy
     belongs_to :category
 
     before_destroy do
         tests.destroy
-        answers.destroy
+        #answers.destroy
     end
     validates :question_content, presence: true, length: {minimum: 10}
     class << self

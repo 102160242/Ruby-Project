@@ -1,6 +1,7 @@
 class Admin::WordsController < ApplicationController
   layout "admin/layouts/application"
-  #before_action :set_word, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, :admin_user
+
   # GET /words
   # GET /words.json
   def index

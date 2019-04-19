@@ -1,15 +1,26 @@
 class Admin::QuestionsController < ApplicationController
   layout "admin/layouts/application"
-  #before_action :set_question, only: [:show, :edit, :update, :destroy]
-  #before_action :admin_user,     only: [:show, :index, :new, :create, :edit, :update, :destroy]
-    # GET /questions
+  before_action :authenticate_user!, :admin_user
+  
+  # GET /questions
   # GET /questions.json
   def index
       @search_key = (params[:search_key].nil? || params[:search_key] == "") ? "" : params[:search_key]
       @order = (params[:order].nil? || params[:order] == "") ? "" : params[:order]
-      @questions = Question.search(@search_key)
-                   .order("question_content #{@order == "az" ? "ASC" : "DESC"}")
-                   .paginate(page: params[:page], :per_page => 15)
+      @questions = Question.search(@search_key)            
+
+      # Sap xep
+      if @order == "question_az"
+          @questions = @questions.order("question_content ASC")
+      elsif @order == "question_za"
+          @questions = @questions.order("question_content DESC")
+      elsif @order == "id_az"
+          @questions = @questions.order("id ASC")
+      else
+          @questions = @questions.order("id DESC") # Mac dinh sap xep theo ID tang dan
+      end
+
+      @questions = @questions.paginate(page: params[:page], :per_page => 15)
   end
   # GET /questions/1
   # GET /questions/1.json

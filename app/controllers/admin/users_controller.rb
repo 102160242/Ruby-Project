@@ -1,7 +1,8 @@
 class Admin::UsersController < ApplicationController
     layout "admin/layouts/application"
+    before_action :authenticate_user!, :admin_user
     before_action :set_user, only: [:show, :edit, :update, :destroy, :followers, :following]
-    before_action :authenticate_user!,:admin_user, only: [:new, :show, :edit, :update, :destroy]
+
     # GET /users
     # GET /users.json
     def index
@@ -14,10 +15,10 @@ class Admin::UsersController < ApplicationController
             @users = @users.order("name ASC")
         elsif @order == "name_za"
             @users = @users.order("name DESC")
-        elsif @order == "id_za"
-            @users = @users.order("id DESC")
+        elsif @order == "id_az"
+            @users = @users.order("id ASC")
         else
-            @users = @users.order("id ASC") # Mac dinh sap xep theo ID tang dan
+            @users = @users.order("id DESC") # Mac dinh sap xep theo ID tang dan
         end
 
         @users = @users.paginate(page: params[:page], :per_page => 10)
@@ -79,10 +80,6 @@ class Admin::UsersController < ApplicationController
         format.html { redirect_to admin_users_path, notice: 'User was successfully destroyed.' }
         format.json { head :no_content }
         end
-    end
-
-    def admin_user
-        redirect_to(root_url) unless current_user.admin?
     end
 
     def following
