@@ -6,4 +6,16 @@ class Test < ApplicationRecord
     before_destroy do
         questions.clear
     end
+
+    class << self
+        def search(key)
+            if(key != "" && !key.nil?)
+                joins(:user)
+                .joins(:category)
+                .where("users.name LIKE ? OR categories.name LIKE ?", "%#{key}%", "%#{key}%")
+            else
+                all
+            end
+        end
+    end
 end

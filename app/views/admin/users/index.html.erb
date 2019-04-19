@@ -1,32 +1,103 @@
-
 <%= provide(:title, "Users") %>
-<div class="container">
-    <h1 class="h1 mt-5">Users</h1>
-    <div class="row d-flex justify-content-between">
-    <div class="table-responsive">
-    <%= link_to 'New User', new_admin_user_path , :class => "btn btn-outline-success"%>
-        <table class="table">
-            <thead>
-                <th>ID</th>
-                <th>Email</th>
-                <th>Action</th>
-            </thead>
-            <tbody>
-                <% @users.each do |user| %>
-                  <tr>
-                    <td><%= user.id %></td>
-                    <td><%= user.email %></td>
-                    <td>
-                        <%= link_to 'Show', admin_user_path(user), :class => "btn btn-outline-info" %>
-                        <%= link_to 'Edit', edit_admin_user_path(user),:class => "btn btn-outline-warning" %>
-                        <%= link_to 'Destroy', admin_user_path(user), method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-outline-danger" %>
-                    </td>
-                  </tr>
-                <% end %>
+<% content_for :header do %>
+<script>
+function updateQueryStringParameter(uri, key, value) {
+  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+  if (uri.match(re)) {
+    return uri.replace(re, '$1' + key + "=" + value + '$2');
+  }
+  else {
+    return uri + separator + key + "=" + value;
+  }
+}
 
-            </tbody>
-        </table>
-    </div>
+function searchAndFilter()
+{
+  var uri = window.location.href;
+  var search_key = $("#search_key").val();
+  var order = $("#order").val();
+  // Update URL
+  uri = updateQueryStringParameter(uri, "page", 1); // Doi ve page 1 de tranh khong co tu khi so luong tu khong du paginate
+  uri = updateQueryStringParameter(uri, "search_key", search_key);
+  if(order == "name_az" || order == "name_za" || order == "id_az" || order == "id_za")
+    uri = updateQueryStringParameter(uri, "order", order);
+  window.location.replace(uri);
+}
+$(document).ready(function() {
+  // Chan user nhan phim enter
+  $('#searchAndFilterForm').submit(function(e) {
+    searchAndFilter();
+    e.preventDefault();
+    return false;
+  });
+});
+</script>
+<% end %>
+<div class="container-fluid">
+    <div class="col-sm-24">
+        <h1 class="h1 mt-5">Users</h1>
+        <div class="row d-flex justify-content-between">
+        <%= link_to 'New User', new_admin_user_path , :class => "btn btn-outline-success mt-3 mb-3"%>
+        <form class="form-inline align-items-center mb-3" id="searchAndFilterForm">
+          <div class="form-row align-items-center">
+           <div class="col-auto">
+             <label class="my-1 mr-2 d-inline" for="search_key">Search</label>
+             <input type="text" class="form-control mr-3 d-inline" id="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
+           </div>
+          <div class="col-auto">
+            <label class="my-1 mr-2 d-inline" for="order">Order</label>
+            <select class="custom-select mr-3 d-inline" id="order">
+             <option value="name_az" <%= "selected" if(@order == "name_az") %>>Name A-Z</option>
+             <option value="name_za" <%= "selected" if(@order == "name_za") %>>Name Z-A</option>
+             <option value="id_az" <%= "selected" if(@order == "id_az") %>>ID A-Z</option>
+             <option value="id_za" <%= "selected" if(@order == "id_za") %>>ID Z-A</option>
+            </select>
+          </div>
+          <div class="col-auto">
+            <button id="search" class="btn btn-primary mb-2">Submit</button>
+          </div>
+         </div>
+        </form>
+      </div>
+        <div class="table-responsive">
+
+            <table class="table">
+                <thead>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Admin</th>
+                    <th>Following</th>
+                    <th>Follower</th>
+                    <th>Learned words</th>
+                    <th>Test</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <% @users.each do |user| %>
+                    <tr>
+                        <td><%= user.id %></td>
+                        <td><%= user.name %></td>
+                        <td><%= user.email %></td>
+                        <td><%= user.admin %></td>
+                        <td><%= user.following.count %></td>
+                        <td><%= user.followers.count %></td>
+                        <td><%= user.words.count %></td>
+                        <td><%= user.tests.count %></td>
+                        <td>
+                            <%= link_to 'Show', admin_user_path(user), :class => "btn btn-outline-info mb-3" %>
+                            <%= link_to 'Edit', edit_admin_user_path(user),:class => "btn btn-outline-warning mb-3" %>
+                            <%= link_to 'Destroy', admin_user_path(user), method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-outline-danger mb-3" %>
+                        </td>
+                    </tr>
+                    <% end %>
+
+                </tbody>
+            </table>
+        </div>
+        </div>
     </div>
     <div class="mt-5"><%= will_paginate @users %></div>
+    
 </div>

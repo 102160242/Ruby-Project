@@ -48,4 +48,13 @@ class User < ApplicationRecord
     def admin?
       return admin
     end
+    class << self
+      def search(key)
+          if(key != "" && !key.nil?)
+              where("email LIKE ? OR name LIKE ?", "%#{key}%", "%#{key}%")
+          else
+              all
+          end
+      end
+  end
 end

@@ -1,15 +1,29 @@
 class Admin::UsersController < ApplicationController
     layout "admin/layouts/application"
-    before_action :set_user, only: [:show, :edit, :update, :destroy]
-    
+    before_action :set_user, only: [:show, :edit, :update, :destroy, :followers, :following]
+    before_action :authenticate_user!,:admin_user, only: [:new, :show, :edit, :update, :destroy]
     # GET /users
     # GET /users.json
     def index
-        @users = User.all
-                     .paginate(page: params[:page], :per_page => 6)
+        @search_key = (params[:search_key].nil? || params[:search_key] == "") ? "" : params[:search_key]
+        @order = (params[:order].nil? || params[:order] == "") ? "" : params[:order]
+        @users = User.search(@search_key)
+
+        # Sap xep
+        if @order == "name_az"
+            @users = @users.order("name ASC")
+        elsif @order == "name_za"
+            @users = @users.order("name DESC")
+        elsif @order == "id_za"
+            @users = @users.order("id DESC")
+        else
+            @users = @users.order("id ASC") # Mac dinh sap xep theo ID tang dan
+        end
+
+        @users = @users.paginate(page: params[:page], :per_page => 10)
     end
     
-    # GET /users/1
+    # GET /users/1, 
     # GET /users/1.json
     def show
         ## Get all tests of current user & all the followed users
@@ -32,17 +46,9 @@ class Admin::UsersController < ApplicationController
     # POST /users.json
     def create
         @user = User.new(user_params)
-        if @user.save
-        flash[:success] = "Welcome to our website!"
-        log_in @user
-        redirect_to root_url
-        else
-        render 'new'
-        end
-    
         respond_to do |format|
         if @user.save
-            format.html { redirect_to @user, notice: 'User was successfully created.' }
+            format.html { redirect_to admin_users_path, notice: 'User was successfully created.' }
             format.json { render :show, status: :created, location: @user }
         else
             format.html { render :new }
@@ -74,6 +80,22 @@ class Admin::UsersController < ApplicationController
         format.json { head :no_content }
         end
     end
+
+    def admin_user
+        redirect_to(root_url) unless current_user.admin?
+    end
+
+    def following
+        @following = @user.following
+                          .order("name ASC")
+                          .paginate(page: params[:page], :per_page => 10)
+    end
+    
+    def followers
+        @followers = @user.followers   
+                          .order("name ASC")
+                          .paginate(page: params[:page], :per_page => 10)
+    end
     
     private
         # Use callbacks to share common setup or constraints between actions.
@@ -83,7 +105,7 @@ class Admin::UsersController < ApplicationController
     
         # Never trust parameters from the scary internet, only allow the white list through.
         def user_params
-        params.require(:user).permit(:username, :email, :password, :password_confirmation)
+        params.require(:user).permit(:name, :email, :password, :password_confirmation)
         end
 
 end

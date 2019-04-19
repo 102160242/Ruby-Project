@@ -1,0 +1,12 @@
+<% provide(:button_text, 'Save changes') %>
+<% provide(:title, 'Edit test') %>
+<div class="container">
+    <h1>Editing Test</h1>
+    <div class="col-md-6   ">
+        <%= render 'form', test: @test %>
+        <td>
+            <%= link_to 'Show', admin_test_path(@test), :class => "btn btn-outline-info" %> 
+            <%= link_to 'Back', admin_tests_path, :class=>"btn btn-outline-warning" %>
+        </td>
+    </div>
+</div>

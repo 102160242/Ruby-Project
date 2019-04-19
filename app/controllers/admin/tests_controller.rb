@@ -5,7 +5,11 @@ class Admin::TestsController < ApplicationController
   
     # GET /tests/1/edit
     def index
-      @tests = Test.all.paginate(page: params[:page], :per_page => 6)
+      @search_key = (params[:search_key].nil? || params[:search_key] == "") ? "" : params[:search_key]
+      @order = (params[:order].nil? || params[:order] == "") ? "" : params[:order]
+      @tests = Test.search(@search_key)
+                   .order("id #{@order == "za" ? "DESC" : "ASC"}")
+                   .paginate(page: params[:page], :per_page => 6)
     end
     
     def new
