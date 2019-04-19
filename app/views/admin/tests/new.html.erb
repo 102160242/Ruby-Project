@@ -1,0 +1,26 @@
+
+<% provide(:button_text, 'Create') %>
+<div class="container">
+  <h1>New Tests</h1>
+  <div class="col-md-6   ">
+    <%= form_with(model: @test,url:admin_tests_path, local: true) do |form| %>
+      <% if @test.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@test.errors.count, "error") %> prohibited this test from being saved:</h2>
+
+          <ul>
+          <% @test.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div class="form-group">
+        <%= form.label :category%>
+        <%= form.text_field :category_id , class:'form-control' %>
+      </div>
+      <%= form.submit yield(:button_text), class: "btn btn-outline-primary" %>
+    <% end %>
+    <%= link_to 'Back', admin_tests_path, class: "btn btn-outline-warning" %>
+  </div>
+</div>
