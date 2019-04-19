@@ -2,7 +2,7 @@ class Category < ApplicationRecord
     has_one_attached :image
     has_and_belongs_to_many :words
     has_many :tests
-    has_many :questions, dependent: :destroy
+    has_many :questions, dependent: :delete_all
     before_destroy do
         words.clear
     end

@@ -1,7 +1,7 @@
 class Question < ApplicationRecord
     has_and_belongs_to_many :tests
-    has_many :answers
-    belongs_to :category, dependent: :destroy
+    has_many :answers, dependent: :delete_all
+    belongs_to :category
 
     before_destroy do
         tests.clear
