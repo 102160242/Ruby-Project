@@ -23,25 +23,17 @@ class Word < ApplicationRecord
             end
         end
 
-        def filter_(key, user_id)
-            if(!key.nil?) 
-                if key == "za"
-                    order("words.word DESC")
-                elsif key == "learnt"
-                    ids = UsersWord.select(:word_id)
-                                   .where(user_id: user_id)
-                                   .map {|x| x.word_id}
-                    where(id: ids)
-                elsif key == "unlearnt"
-                    ids = UsersWord.select(:word_id)
-                                   .where(user_id: user_id)
-                                   .map {|x| x.word_id}
-                    where.not(id: ids)
-                else
-                    order("words.word ASC") # Order mac dinh theo A-Z
-                end               
+        def learnt(user_id, val = true)
+            if val
+                ids = UsersWord.select(:word_id)
+                            .where(user_id: user_id)
+                            .map {|x| x.word_id}
+                where(id: ids)
             else
-                all
+                ids = UsersWord.select(:word_id)
+                            .where(user_id: user_id)
+                            .map {|x| x.word_id}
+                where.not(id: ids)
             end
         end
 

@@ -16,17 +16,5 @@ class Category < ApplicationRecord
                 all
             end
         end
-
-        def filter_(key)
-            if(!key.nil?) 
-                if key == "za"
-                    order("categories.name DESC")
-                else
-                    order("categories.name ASC") # Order mac dinh theo A-Z
-                end               
-            else
-                all
-            end
-        end
     end
 end

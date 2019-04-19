@@ -5,9 +5,9 @@ class CategoriesController < ApplicationController
   # GET /categories.json
   def index
     @search_key = (params[:search_key].nil? || params[:search_key] == "") ? "" : params[:search_key]
-    @filter = (params[:filter].nil? || params[:filter] == "") ? "" : params[:filter]
+    @order = (params[:order].nil? || params[:order] == "") ? "" : params[:order]
     @categories = Category.search(@search_key)
-                          .filter_(@filter)
+                          .order("name #{@order == "za" ? "DESC" : "ASC"}")
                           .paginate(page: params[:page], :per_page => 6)
   end
 

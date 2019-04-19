@@ -5,7 +5,7 @@ class TestsController < ApplicationController
   # GET /tests/1/edit
   def edit
     if !current_user.tests.include?(@test)
-      render file: Rails.public_path.join("404.html"), layout: false
+      show_404_error
     else
       if @test.created_at != @test.updated_at
         redirect_to @test
@@ -14,6 +14,7 @@ class TestsController < ApplicationController
   end
 
   def show
+    show_404_error if @test.created_at == @test.updated_at # Khong cho xem ket qua khi bai test chua duoc submit
     @chosen_answers = QuestionsTest.select(:question_id, :chosen_answer_id).where(:test_id => @test.id).all
   end
 
@@ -25,11 +26,11 @@ class TestsController < ApplicationController
     
     respond_to do |format|
       if @test.save
-        ## Get Random Questions ##
+        ## Lay ngau nhien cac cau hoi ##
         @questions = Question.joins(:category)
-                            .where("categories.id = #{category_id}") # Question belongs to the Category user chose
-                            .order("RANDOM()") # Take random records
-                            .first(20)
+                            .where("categories.id = #{category_id}") # Lay cau hoi thuoc ve category user chon
+                            .order("RANDOM()") # Lay ngau nhien
+                            .first(20)  # 20 cau hoi
         @test.questions << @questions
 
         format.html { redirect_to do_test_path(@test) }
@@ -48,7 +49,7 @@ class TestsController < ApplicationController
   def update
     if @test.created_at != @test.updated_at 
       respond_to do |format|
-        format.html { redirect_to @test, notice: "Cheating activity is not allowed! You has done this test!" } # Action is not allowed
+        format.html { redirect_to @test, notice: "Cheating activity is not allowed! You have done this test!" } # Khong cho phep user lam lai bai test da nop
       end
     else
       begin
@@ -60,12 +61,12 @@ class TestsController < ApplicationController
             if question.answers.where("answers.id = #{ans.to_i}").first.right_answer
               score = score + 1
             end
-            ## Update Chosen Answer ID ##
+            ## Cap nhat Answer ID da chon ##
             QuestionsTest.where(:question_id => question.id, :test_id => @test.id)
                         .update_all(:chosen_answer_id => ans.to_i)
           end
         end
-        ## Save Score ##
+        ## Luu diem ##
         @test.score = score
         @test.save
 

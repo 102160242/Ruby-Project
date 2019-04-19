@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   post 'signup', to: 'users#create'
   get 'learn/:category_id', to: 'words#index', as: 'learn'
   post 'word/add_learnt_word', to: 'words#add_learnt_word'
+  get 'learnt_words', to: 'words#learnt_words'
+  
   namespace :admin do
     resources :answers
     resources :questions

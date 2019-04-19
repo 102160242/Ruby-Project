@@ -9,4 +9,8 @@ class ApplicationController < ActionController::Base
       devise_parameter_sanitizer.permit :sign_up, keys: added_attrs
       devise_parameter_sanitizer.permit :account_update, keys: added_attrs
     end
+
+    def show_404_error
+      render file: Rails.public_path.join("404.html"), layout: false
+    end
 end

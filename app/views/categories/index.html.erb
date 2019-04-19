@@ -16,13 +16,13 @@ function searchAndFilter()
 {
   var uri = window.location.href;
   var search_key = $("#search_key").val();
-  var filter = $("#filter").val();
+  var order = $("#order").val();
   
   // Update URL
   uri = updateQueryStringParameter(uri, "page", 1); // Doi ve page 1 de tranh khong co tu khi so luong tu khong du paginate
   uri = updateQueryStringParameter(uri, "search_key", search_key);
-  if(filter == "az" || filter == "za")
-    uri = updateQueryStringParameter(uri, "filter", filter);
+  if(order == "az" || order == "za")
+    uri = updateQueryStringParameter(uri, "order", order);
   window.location.replace(uri);
 }
 $(document).ready(function() {
@@ -44,10 +44,10 @@ $(document).ready(function() {
           <input type="text" class="form-control mr-3 d-inline" id="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
         </div>
         <div class="col-auto">
-          <label class="my-1 mr-2 d-inline" for="filter">Filter</label>
-          <select class="custom-select mr-3 d-inline" id="filter">
-            <option value="az" <%= "selected" if(@filter == "az") %>>A-Z</option>
-            <option value="za" <%= "selected" if(@filter == "za") %>>Z-A</option>
+          <label class="my-1 mr-2 d-inline" for="order">Order</label>
+          <select class="custom-select mr-3 d-inline" id="order">
+            <option value="az" <%= "selected" if(@order == "az") %>>A-Z</option>
+            <option value="za" <%= "selected" if(@order == "za") %>>Z-A</option>
           </select>
         </div>
         <div class="col-auto">

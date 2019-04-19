@@ -1,4 +1,4 @@
-<%= provide(:title, "Learn words about #{@category.name}") %>
+<%= provide(:title, "My learnt words") %>
 <% content_for :header do %>
 <script>
 function updateQueryStringParameter(uri, key, value) {
@@ -17,16 +17,14 @@ function searchAndFilter()
   var uri = window.location.href;
   var search_key = $("#search_key").val();
   var order = $("#order").val();
-  var filter = $("#filter").val();
-  
+  var category_id = $("#category_id").val();
+
   // Update URL
   uri = updateQueryStringParameter(uri, "page", 1); // Doi ve page 1 de tranh khong co tu khi so luong tu khong du paginate
   uri = updateQueryStringParameter(uri, "search_key", search_key);
   if(order == "az" || order == "za")
     uri = updateQueryStringParameter(uri, "order", order);
-  if(filter == "learnt" || filter == "unlearnt" || filter == "all")
-    uri = updateQueryStringParameter(uri, "filter", filter);
-
+  uri = updateQueryStringParameter(uri, "category_id", category_id);
   window.location.replace(uri);
 }
 $(document).ready(function() {
@@ -43,7 +41,7 @@ $(document).ready(function() {
   <div class="row d-flex justity-content-center mt-5">
     <div class="col-md-8">
       <div class="card border-bottom-primary mb-3">
-        <div class="card-header bg-transparent border-primary"><h2 class="h2">Words List of <%= @category.name %></h2></div>
+        <div class="card-header bg-transparent border-primary"><h2 class="h2">Words List</h2></div>
         <div class="card-body">
           <div class="row">
             <% @words.each do |word| %>
@@ -63,16 +61,6 @@ $(document).ready(function() {
                         <% end %>
                       </div>
                     </div>
-                      <%= form_with model: word, url: word_add_learnt_word_path, method: "post", remote: true, id: "form_#{word.id}"  do |f| %>
-                        <%= hidden_field :word, :id, value: word.id %>
-                        <% if current_user.words.include?(word) %>
-                          <%= hidden_field :word, :option, value: "remove" %>
-                          <%= submit_tag "Remove from list", class: "btn btn-danger", 'data-disable-with' => "Please wait.." %>
-                        <% else %>
-                          <%= hidden_field :word, :option, value: "add" %>
-                          <%= submit_tag "Check as Learnt", class: "btn btn-success", 'data-disable-with' => "Please wait.." %>
-                        <% end %>
-                      <% end %>
                   </div>
                 </div>
               </div>
@@ -83,7 +71,7 @@ $(document).ready(function() {
       <div class="mt-5"><%= will_paginate @words %></div>
     </div>
     <div class="col-md-4">
-          <div class="card border-bottom-success mb-3">
+      <div class="card border-bottom-success mb-3">
         <div class="card-header bg-transparent border-success"><h2 class="h2">Filter & Search</h2></div>
         <div class="card-body">
             <form class="form" id="searchAndFilterForm">
@@ -92,11 +80,12 @@ $(document).ready(function() {
                     <input type="text" class="form-control" id="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
                 </div>
                 <div class="form-group">
-                    <label class="my-1 mr-2" for="filter">Filter</label>
-                    <select class="custom-select" id="filter">
-                        <option value="all">All</option>
-                        <option value="learnt" <%= "selected" if(@filter == "learnt") %>>Learnt Words</option>
-                        <option value="unlearnt" <%= "selected" if(@filter == "unlearnt") %>>Unlearnt Words</option>
+                    <label class="my-1 mr-2" for="category_id">Category</label>
+                    <select class="custom-select" id="category_id">
+                        <option value>All</option>
+                        <% @categories.each do |category| %>
+                            <option value="<%= category.id %>" <%= "selected" if(@category_id == category.id) %>><%= category.name %></option>
+                        <% end %>
                     </select>
                 </div>
                 <div class="form-group">
@@ -110,22 +99,7 @@ $(document).ready(function() {
                     <button id="search" class="btn btn-primary mb-2">Submit</button>
                 </div>
             </form>
-        </div>
-        <div class="card-footer bg-transparent border-success">
-        </div>
-      </div>
-      <div class="card border-bottom-success mb-3">
-        <div class="card-header bg-transparent border-success"><h2 class="h2">My Words</h2></div>
-        <div class="card-body" id="words-list">
-          <% @my_words.each do |word| %>
-            <%= render 'word_brief', word: word %>
-          <% end %>
-          <hr>
-          <%= link_to "Full list", "#{learnt_words_path}?category_id=#{@category.id}", class: "h4 mt-3 text-success" %>
-        </div>
-        <div class="card-footer bg-transparent border-success">
-          <%= render file: 'tests/_new_form.html.erb', locals: { :category_id => @category.id } %>
-        </div>
+        </div>      
       </div>
     </div>
   </div>
