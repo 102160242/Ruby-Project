@@ -1,6 +1,6 @@
 class Admin::TestsController < ApplicationController
   layout "admin/layouts/application"
-    before_action :authenticate_user!, only: [:create, :edit, :update]
+    before_action :authenticate_user!, :admin_user
     before_action :set_test, only: [:show, :edit, :update, :destroy]
   
     # GET /tests/1/edit
@@ -8,12 +8,14 @@ class Admin::TestsController < ApplicationController
       @search_key = (params[:search_key].nil? || params[:search_key] == "") ? "" : params[:search_key]
       @order = (params[:order].nil? || params[:order] == "") ? "" : params[:order]
       @tests = Test.search(@search_key)
-                   .order("id #{@order == "za" ? "DESC" : "ASC"}")
+                   .order("id #{@order == "az" ? "ASC" : "DESC"}")
                    .paginate(page: params[:page], :per_page => 6)
     end
     
     def new
       @test = Test.new
+      @users = User.all.collect {|p| [ p.name, p.id]}
+      @categories = Category.all.collect {|p| [ p.name, p.id]}
     end
     
     def show
@@ -45,37 +47,25 @@ class Admin::TestsController < ApplicationController
         format.js {}
       end
     end
+    
+    def edit
+      @categories = Category.all.collect {|p| [ p.name, p.id]}
+    end
   
     # PATCH/PUT /tests/1
     # PATCH/PUT /tests/1.json
     def update
-      begin
-        answers = params[:test][:answer_ids]
-        score = 0
-        @test.questions.each do |question|
-          ans = answers["question_#{question.id}"]
-          if !ans.nil?
-            if question.answers.where("answers.id = #{ans.to_i}").first.right_answer
-              score = score + 1
-            end
-            ## Update Chosen Answer ID ##
-            QuestionsTest.where(:question_id => question.id, :test_id => @test.id)
-                        .update_all(:chosen_answer_id => ans.to_i)
-            ## Save Score ##
-            @test.score = score
-            @test.save
-          end
-        end
+      if @test.update(test_params)
         respond_to do |format|
-          format.html { redirect_to @test }
-          format.json { render :show, status: :ok, location: @test }
+          format.html { redirect_to admin_tests_path }
+          format.json { render :show, status: :ok, location: admin_tests_path }
         end
-      rescue
+      else
         respond_to do |format|
           format.html { render :edit, notice: "Please do you test again. An unexpected error has occured!" }
           format.json { render json: @test.errors, status: :unprocessable_entity }
         end
-      end
+      end              
     end
 
     def destroy
@@ -94,6 +84,6 @@ class Admin::TestsController < ApplicationController
   
       # Never trust parameters from the scary internet, only allow the white list through.
       def test_params
-        params.require(:test).permit(:category_id, answer_ids: [])
+        params.require(:test).permit(:category_id, :score)
       end
 end

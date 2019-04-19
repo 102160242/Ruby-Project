@@ -1,6 +1,6 @@
 class Admin::QuestionsController < ApplicationController
   layout "admin/layouts/application"
-  #before_action :set_question, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, :admin_user
     # GET /questions
   # GET /questions.json
   def index

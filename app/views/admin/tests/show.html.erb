@@ -2,6 +2,7 @@
 <div class="containter">
   <div class="row d-flex justify-content-center mt-5">
     <div class="col-md-8">
+      <% if !@test.score.nil? %>
       <div class="card">
         <div class="card-header">
           <h4>Result</h4>
@@ -40,6 +41,27 @@
           <% end %>
         </div>
       </div>
+      <% else %>
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td>User</td>
+                  <td><%= link_to @test.user.name,  admin_user_path(@test.user) %></td>
+                </tr>
+                <tr>
+                  <td>Category</td>
+                  <td><%= link_to @test.category.name,  admin_category_path(@test.category) %></td>
+                </tr>
+              </tbody>
+            <table>
+          </div>
+          <span class="text-danger">This test hasn't been done yet!</span>
+        </div>
+      </div>
+      <% end %>
     </div>
   </div>
   <div class="text-center mt-4">

@@ -16,8 +16,8 @@
         </div>
       <% end %>
       <div class="form-group">
-        <%= form.label :username%>
-        <%= form.text_field :username , class:'form-control' %>
+        <%= form.label :name %>
+        <%= form.text_field :name , class:'form-control' %>
       </div>
       <div class="form-group">
         <%= form.label :email %>
@@ -25,7 +25,7 @@
       </div>
       <div class="form-group">
         <%= form.label :password %>
-        <%= form.text_field :password, class:'form-control' %>
+        <%= form.password_field :password, class:'form-control' %>
       </div>
       <%= form.submit yield(:button_text), class: "btn btn-outline-primary" %>
     <% end %>
