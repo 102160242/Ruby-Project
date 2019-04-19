@@ -1,13 +1,15 @@
 class Admin::QuestionsController < ApplicationController
   layout "admin/layouts/application"
   #before_action :set_question, only: [:show, :edit, :update, :destroy]
+  #before_action :admin_user,     only: [:show, :index, :new, :create, :edit, :update, :destroy]
     # GET /questions
   # GET /questions.json
   def index
-    @questions = Question.all
-                         .order("id DESC")
-                         .order("category_id ASC")
-                         .paginate(page: params[:page], :per_page => 15)
+      @search_key = (params[:search_key].nil? || params[:search_key] == "") ? "" : params[:search_key]
+      @order = (params[:order].nil? || params[:order] == "") ? "" : params[:order]
+      @questions = Question.search(@search_key)
+                   .order("question_content #{@order == "az" ? "ASC" : "DESC"}")
+                   .paginate(page: params[:page], :per_page => 15)
   end
   # GET /questions/1
   # GET /questions/1.json

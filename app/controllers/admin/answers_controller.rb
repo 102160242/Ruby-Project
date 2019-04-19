@@ -1,10 +1,11 @@
 class Admin::AnswersController < ApplicationController
     layout "admin/layouts/application"
     def index
-        @answers = Answer.all
-                         .order("id DESC")
-                         .order("question_id ASC")
-                         .paginate(page: params[:page], :per_page => 15)
+      @search_key = (params[:search_key].nil? || params[:search_key] == "") ? "" : params[:search_key]
+      @order = (params[:order].nil? || params[:order] == "") ? "" : params[:order]
+      @answers = Answer.search(@search_key)
+                   .order("answer_content #{@order == "za" ? "DESC" : "ASC"}")
+                   .paginate(page: params[:page], :per_page => 15)
       end
     
       # GET /answers/1
