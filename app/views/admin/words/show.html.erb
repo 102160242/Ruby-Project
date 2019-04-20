@@ -1,29 +1,4 @@
-<!--<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Word:</strong>
-  <%= @word.word %>
-</p>
-
-<p>
-  <strong>Meaning:</strong>
-  <%= @word.meaning %>
-</p>
-
-<p>
-  <strong>Word class:</strong>
-  <%= @word.word_class %>
-</p>
-
-<p>
-  <strong>Image:</strong>
-  <% if @word.image.attached? %> <br />
-  <%= image_tag @word.image.variant(resize: "300x300") %>
-  <%end%>
-</p>
-
-<%= link_to 'Edit', edit_admin_word_path(@word),:class => "btn btn-outline-info" %> |
-<%= link_to 'Back', admin_words_path,:class => "btn btn-outline-danger" %> -->
+<% provide(:title, 'Show Word') %>
 <div class="container mt-3">
     <div class="row d-flex justify-content-center">
         <div class="col-sm-12 col-md-8">

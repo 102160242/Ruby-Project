@@ -3,6 +3,7 @@
 <%= render 'form', word: @word %>
 
 <%= link_to 'Back', admin_words_path %> -->
+<% provide(:title, 'New Word') %>
 <% provide(:button_text, 'Save changes') %>
 <div class="container mt-3">
     <div class="row d-flex justify-content-center">
