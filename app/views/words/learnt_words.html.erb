@@ -1,42 +1,4 @@
 <%= provide(:title, "My learnt words") %>
-<% content_for :header do %>
-<script>
-function updateQueryStringParameter(uri, key, value) {
-  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
-  if (uri.match(re)) {
-    return uri.replace(re, '$1' + key + "=" + value + '$2');
-  }
-  else {
-    return uri + separator + key + "=" + value;
-  }
-}
-
-function searchAndFilter()
-{
-  var uri = window.location.href;
-  var search_key = $("#search_key").val();
-  var order = $("#order").val();
-  var category_id = $("#category_id").val();
-
-  // Update URL
-  uri = updateQueryStringParameter(uri, "page", 1); // Doi ve page 1 de tranh khong co tu khi so luong tu khong du paginate
-  uri = updateQueryStringParameter(uri, "search_key", search_key);
-  if(order == "az" || order == "za")
-    uri = updateQueryStringParameter(uri, "order", order);
-  uri = updateQueryStringParameter(uri, "category_id", category_id);
-  window.location.replace(uri);
-}
-$(document).ready(function() {
-  // Chan user nhan phim enter
-  $('#searchAndFilterForm').submit(function(e) {
-    searchAndFilter();
-    e.preventDefault();
-    return false;
-  });
-});
-</script>
-<% end %>
 <div class="container">
   <div class="row d-flex justity-content-center mt-5">
     <div class="col-md-8">
@@ -74,14 +36,15 @@ $(document).ready(function() {
       <div class="card border-bottom-success mb-3">
         <div class="card-header bg-transparent border-success"><h2 class="h2">Filter & Search</h2></div>
         <div class="card-body">
-            <form class="form" id="searchAndFilterForm">
+            <form class="form" id="searchAndFilterForm" method="GET">
+                <input type="text" name="page" value="1" hidden>
                 <div class="form-group">
                     <label class="" for="search_key">Search</label>
-                    <input type="text" class="form-control" id="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
+                    <input type="text" class="form-control" id="search_key" name="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
                 </div>
                 <div class="form-group">
                     <label class="my-1 mr-2" for="category_id">Category</label>
-                    <select class="custom-select" id="category_id">
+                    <select class="custom-select" id="category_id" name="category_id">
                         <option value>All</option>
                         <% @categories.each do |category| %>
                             <option value="<%= category.id %>" <%= "selected" if(@category_id == category.id) %>><%= category.name %></option>
@@ -90,7 +53,7 @@ $(document).ready(function() {
                 </div>
                 <div class="form-group">
                     <label class="my-1 mr-2" for="order">Order</label>
-                    <select class="custom-select" id="order">
+                    <select class="custom-select" name="order" id="order">
                         <option value="az" <%= "selected" if(@order == "az") %>>A-Z</option>
                         <option value="za" <%= "selected" if(@order == "za") %>>Z-A</option>
                     </select>

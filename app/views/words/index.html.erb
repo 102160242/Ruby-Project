@@ -1,44 +1,4 @@
 <%= provide(:title, "Learn words about #{@category.name}") %>
-<% content_for :header do %>
-<script>
-function updateQueryStringParameter(uri, key, value) {
-  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
-  if (uri.match(re)) {
-    return uri.replace(re, '$1' + key + "=" + value + '$2');
-  }
-  else {
-    return uri + separator + key + "=" + value;
-  }
-}
-
-function searchAndFilter()
-{
-  var uri = window.location.href;
-  var search_key = $("#search_key").val();
-  var order = $("#order").val();
-  var filter = $("#filter").val();
-  
-  // Update URL
-  uri = updateQueryStringParameter(uri, "page", 1); // Doi ve page 1 de tranh khong co tu khi so luong tu khong du paginate
-  uri = updateQueryStringParameter(uri, "search_key", search_key);
-  if(order == "az" || order == "za")
-    uri = updateQueryStringParameter(uri, "order", order);
-  if(filter == "learnt" || filter == "unlearnt" || filter == "all")
-    uri = updateQueryStringParameter(uri, "filter", filter);
-
-  window.location.replace(uri);
-}
-$(document).ready(function() {
-  // Chan user nhan phim enter
-  $('#searchAndFilterForm').submit(function(e) {
-    searchAndFilter();
-    e.preventDefault();
-    return false;
-  });
-});
-</script>
-<% end %>
 <div class="container">
   <div class="row d-flex justity-content-center mt-5">
     <div class="col-md-8">
@@ -86,14 +46,15 @@ $(document).ready(function() {
           <div class="card border-bottom-success mb-3">
         <div class="card-header bg-transparent border-success"><h2 class="h2">Filter & Search</h2></div>
         <div class="card-body">
-            <form class="form" id="searchAndFilterForm">
+            <form class="form" id="searchAndFilterForm" method="GET">
+            <input type="text" name="page" value="1" hidden>
                 <div class="form-group">
                     <label class="" for="search_key">Search</label>
-                    <input type="text" class="form-control" id="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
+                    <input type="text" class="form-control" id="search_key" name="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
                 </div>
                 <div class="form-group">
                     <label class="my-1 mr-2" for="filter">Filter</label>
-                    <select class="custom-select" id="filter">
+                    <select class="custom-select" id="filter" name="filter">
                         <option value="all">All</option>
                         <option value="learnt" <%= "selected" if(@filter == "learnt") %>>Learnt Words</option>
                         <option value="unlearnt" <%= "selected" if(@filter == "unlearnt") %>>Unlearnt Words</option>
@@ -101,7 +62,7 @@ $(document).ready(function() {
                 </div>
                 <div class="form-group">
                     <label class="my-1 mr-2" for="order">Order</label>
-                    <select class="custom-select" id="order">
+                    <select class="custom-select" id="order" name="order">
                         <option value="az" <%= "selected" if(@order == "az") %>>A-Z</option>
                         <option value="za" <%= "selected" if(@order == "za") %>>Z-A</option>
                     </select>

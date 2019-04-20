@@ -1,53 +1,18 @@
 <%= provide(:title, "Answers") %>
-<% content_for :header do %>
-<script>
-function updateQueryStringParameter(uri, key, value) {
-  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
-  if (uri.match(re)) {
-    return uri.replace(re, '$1' + key + "=" + value + '$2');
-  }
-  else {
-    return uri + separator + key + "=" + value;
-  }
-}
-
-function searchAndFilter()
-{
-  var uri = window.location.href;
-  var search_key = $("#search_key").val();
-  var order = $("#order").val();
-  
-  // Update URL
-  uri = updateQueryStringParameter(uri, "page", 1); // Doi ve page 1 de tranh khong co tu khi so luong tu khong du paginate
-  uri = updateQueryStringParameter(uri, "search_key", search_key);
-  if(order == "id_az" || order == "id_za" || order == "answer_az" || order == "answer_za")
-    uri = updateQueryStringParameter(uri, "order", order);
-  window.location.replace(uri);
-}
-$(document).ready(function() {
-  // Chan user nhan phim enter
-  $('#searchAndFilterForm').submit(function(e) {
-    searchAndFilter();
-    e.preventDefault();
-    return false;
-  });
-});
-</script>
-<% end %>
 <div class="container-fluid">
     <h1 class="h1 mt-5">Answers</h1>
     <div class="row d-flex justify-content-between">
     <%= link_to 'New Answer', new_admin_answer_path, class: "btn btn-outline-success mt-3 mb-3" %>
-    <form class="form-inline align-items-center mb-3" id="searchAndFilterForm">
+    <form class="form-inline align-items-center mb-3" id="searchAndFilterForm" method="GET">
+          <input type="text" name="page" value="1" hidden>
           <div class="form-row align-items-center">
            <div class="col-auto">
              <label class="my-1 mr-2 d-inline" for="search_key">Search</label>
-             <input type="text" class="form-control mr-3 d-inline" id="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
+             <input type="text" class="form-control mr-3 d-inline" id="search_key" name="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
            </div>
           <div class="col-auto">
             <label class="my-1 mr-2 d-inline" for="order">Order</label>
-            <select class="custom-select mr-3 d-inline" id="order">
+            <select class="custom-select mr-3 d-inline" id="order" name="order">
              <option value="answer_az" <%= "selected" if(@order == "answer_az") %>>Answer A-Z</option>
              <option value="answer_za" <%= "selected" if(@order == "answer_za") %>>Answer Z-A</option>
              <option value="id_az" <%= "selected" if(@order == "id_az") %>>ID A-Z</option>

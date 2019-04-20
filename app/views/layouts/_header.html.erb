@@ -14,7 +14,7 @@
     <ul class="navbar-nav ml-auto">
       <% if user_signed_in? %>
         <li class="nav-item">
-          <%= link_to raw("<i class=\"fas fa-newspaper\"></i> New Feeds"), user_path(current_user), class: 'nav-link' %>
+          <%= link_to raw("<i class=\"fas fa-newspaper\"></i> News Feed"), user_path(current_user), class: 'nav-link' %>
         </li>
       <% end %>
       <li class="nav-item">

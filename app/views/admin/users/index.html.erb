@@ -39,15 +39,16 @@ $(document).ready(function() {
         <h1 class="h1 mt-5">Users</h1>
         <div class="row d-flex justify-content-between">
         <%= link_to 'New User', new_admin_user_path , :class => "btn btn-outline-success mt-3 mb-3"%>
-        <form class="form-inline align-items-center mb-3" id="searchAndFilterForm">
+        <form class="form-inline align-items-center mb-3" id="searchAndFilterForm" method="GET">
+        <input type="text" name="page" value="1" hidden>
           <div class="form-row align-items-center">
            <div class="col-auto">
              <label class="my-1 mr-2 d-inline" for="search_key">Search</label>
-             <input type="text" class="form-control mr-3 d-inline" id="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
+             <input type="text" class="form-control mr-3 d-inline" id="search_key" name="search_key" value="<%= @search_key %>" placeholder="For example: juxtaposition">
            </div>
           <div class="col-auto">
             <label class="my-1 mr-2 d-inline" for="order">Order</label>
-            <select class="custom-select mr-3 d-inline" id="order">
+            <select class="custom-select mr-3 d-inline" id="order" name="order">
              <option value="name_az" <%= "selected" if(@order == "name_az") %>>Name A-Z</option>
              <option value="name_za" <%= "selected" if(@order == "name_za") %>>Name Z-A</option>
              <option value="id_az" <%= "selected" if(@order == "id_az") %>>ID A-Z</option>
