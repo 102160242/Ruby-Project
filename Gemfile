@@ -43,6 +43,8 @@ gem 'ruby-debug-ide'
 gem 'debase'
 gem 'rspec'
 gem 'faker'
+gem "simple_token_authentication"
+gem 'rack-cors'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 

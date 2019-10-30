@@ -1,4 +1,7 @@
 class User < ApplicationRecord
+    #require 'simple_token_authentication'
+    acts_as_token_authenticatable
+
     devise :database_authenticatable, :registerable,
            :recoverable, :rememberable, :trackable, :validatable
     has_many :active_relationships,  class_name:  "Relationship",

@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     post 'login', to: 'devise/sessions#create'
     delete 'logout', to: 'devise/sessions#destroy', via: Devise.mappings[:user].sign_out_via
   end
+
   resources :tests, only: [:show, :create, :update] do
     member do
       get 'do', to: 'tests#edit'
@@ -38,13 +39,18 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :admin do
-    resources :categories
-    resources :words
-  end
   resources :answers
   resources :questions
   resources :categories
   resources :words
   resources :relationships, only: [:create, :destroy]
+
+  namespace :api do
+    as :user do
+      #get 'login', to: 'users#new'
+      post 'signup', to: 'registrations#create'
+      post 'login', to: 'sessions#create'
+      delete 'logout', to: 'sessions#destroy', via: Devise.mappings[:user].sign_out_via
+    end
+  end
 end
