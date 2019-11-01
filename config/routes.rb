@@ -45,12 +45,15 @@ Rails.application.routes.draw do
   resources :words
   resources :relationships, only: [:create, :destroy]
 
-  namespace :api do
+  namespace :api, defaults: {format: :json} do
     as :user do
       #get 'login', to: 'users#new'
       post 'signup', to: 'registrations#create'
       post 'login', to: 'sessions#create'
       delete 'logout', to: 'sessions#destroy', via: Devise.mappings[:user].sign_out_via
+    end
+    scope '/user' do
+      get 'info', to: 'users#info'
     end
   end
 end

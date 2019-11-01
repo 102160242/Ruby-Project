@@ -4,19 +4,26 @@ class Api::ApplicationController < ActionController::API
   respond_to :json
 
   private
+  def render_json(data, status = "success", message = "", code = 200)
+    render json:
+      { status: status, message: message, data: data }, status: code
+  end
+
+  def ensure_token_exist
+    render_json("", "error", "Authorization Token is required!", 401) if request.headers["Authorization"].nil?
+  end
+
   def current_user
     @current_user ||= User.find_by authentication_token: request.headers["Authorization"] #token thông qua header
   end
 
   def authenticate_user_from_token
-    render json: {message: "You are not authenticated"},
-      status: 401 if current_user.nil?
-  end
+    render_json("", "error", "You are not authenticated!", 401) if current_user.nil?
   end
 
   def ensure_params_exist
    return unless params[:user].blank?
-    render json: {message: "Missing params"}, status: 422
+    render_json("", "error", "Missing params!", 422)
   end
 
   def load_user_authentication
@@ -25,7 +32,6 @@ class Api::ApplicationController < ActionController::API
   end
 
   def login_invalid
-    render json:
-      {message: "Invalid login"}, status: 200
+    render_json("", "error", "Invalid login!", 200)
   end
 end
