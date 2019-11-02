@@ -55,5 +55,8 @@ Rails.application.routes.draw do
     scope '/user' do
       get 'info', to: 'users#info'
     end
+    scope '/categories' do
+      get '', to: 'categories#index'
+    end
   end
 end
