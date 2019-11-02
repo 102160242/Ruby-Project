@@ -54,6 +54,8 @@ Rails.application.routes.draw do
     end
     scope '/user' do
       get 'info', to: 'users#info'
+      get 'followers', to:'users#followers'
+      get 'following', to:'users#following'
     end
     scope '/categories' do
       get '', to: 'categories#index'
