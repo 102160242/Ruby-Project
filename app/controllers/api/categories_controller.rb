@@ -1,7 +1,7 @@
 class Api::CategoriesController < Api::ApplicationController
     respond_to :json
     def index
-        @categories = Category.select("id", "name")
+        @categories = Category.select("id", "name").order("name")
                              
         @jsonData = []
         @categories.each do |i|

@@ -54,6 +54,7 @@ Rails.application.routes.draw do
     end
     scope '/user' do
       get 'info', to: 'users#info'
+      get 'newsfeed', to: 'users#newsfeed'
     end
     scope '/categories' do
       get '', to: 'categories#index'
