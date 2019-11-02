@@ -17,6 +17,18 @@ class Api::UsersController < Api::ApplicationController
         render_json(@tests)        
     end
 
+    def following
+        @following = @current_user.following.select("id", "name", "email")
+                            .order("name ASC")
+        render_json(@following)
+    end
+
+    def followers
+        @followers = @current_user.followers.select("id", "name", "email")
+                            .order("name ASC")
+        render_json(@followers)
+    end
+    
     private
     # def user_params
     #   params.require(:user).permit :email, :name, :password, :password_confirmation
