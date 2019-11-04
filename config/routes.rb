@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get 'learn/:category_id', to: 'words#index', as: 'learn'
   post 'word/add_learnt_word', to: 'words#add_learnt_word'
   get 'learnt_words', to: 'words#learnt_words'
-  
+
   namespace :admin do
     resources :answers
     resources :questions
@@ -46,20 +46,22 @@ Rails.application.routes.draw do
   resources :relationships, only: [:create, :destroy]
 
   namespace :api, defaults: {format: :json} do
+    devise_for :users
     as :user do
       #get 'login', to: 'users#new'
       post 'signup', to: 'registrations#create'
       post 'login', to: 'sessions#create'
       delete 'logout', to: 'sessions#destroy', via: Devise.mappings[:user].sign_out_via
     end
+    scope '/categories' do
+      get '', to: 'categories#index'
+    end
     scope '/user' do
       get 'info', to: 'users#info'
       get 'newsfeed', to: 'users#newsfeed'
-      get 'followers', to:'users#followers'
-      get 'following', to:'users#following'
-    end
-    scope '/categories' do
-      get '', to: 'categories#index'
+      get 'followers', to: 'users#followers'
+      get 'following', to: 'users#following'
+      patch 'update', to: 'users#update'
     end
   end
 end

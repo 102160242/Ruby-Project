@@ -13,6 +13,16 @@ class Api::RegistrationsController < Devise::RegistrationsController
     end
   end
 
+  def update
+    @a = @current_user.update(user_params)
+    if(@a)
+      p @a
+      render json: {status: "success", message: "Updated"}, status: 200
+    else
+      render json: {status: "error", message: "Failed"}, status: 200
+    end
+  end
+
   def ensure_params_exist
     return unless params[:user].blank?
      render json: {status: "error", message: "Missing params"}, status: 422
