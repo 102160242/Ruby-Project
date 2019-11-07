@@ -1,11 +1,18 @@
 class Api::UsersController < Api::ApplicationController
+    include ApplicationHelper
     before_action :ensure_token_exist, :authenticate_user_from_token
     before_action :user_params, only: [:update]
     #respond_to :json
 
     def info
         @current_user = current_user
-        render_json(@current_user)
+        @json = @current_user.as_json
+        @json[:avatar_url] = gravatar_url(@current_user.email, 100)
+        @json[:total_followers] = @current_user.followers.count
+        @json[:total_following] = @current_user.following.count
+        @json[:total_learnt_words] = @current_user.words.count
+        @json[:total_test] = @current_user.tests.count
+        render_json(@json)
         #render :json => { status: :success, data: @current_user }
     end
 
