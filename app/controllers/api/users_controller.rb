@@ -30,6 +30,29 @@ class Api::UsersController < Api::ApplicationController
         render_json(@followers)
     end
 
+    def follow
+        begin
+            @other_user = User.find(params[:id])
+            current_user.follow(@other_user)
+            render_json("", "success", "Followed user " + @other_user.name + "!")
+        rescue Exception => e
+            render_json("", "error", "There was an error while attemping to follow this user!" + e)
+        end
+    end
+
+    def unfollow
+        # @params = params[:id]
+        # @attributes = Relationship.find(@params).followed
+        begin
+            @other_user = User.find(params[:id])
+            current_user.unfollow(@other_user)
+            render_json("", "success", "Unfollowed user " + @other_user.name + "!")
+        rescue Exception => e
+            render_json("", "error", "There was an error while attemping to unfollow this user!")
+        end
+
+    end
+
     def update
         @params = params[:user]#.reject{|_, v| v.blank?}
         @json = {}
