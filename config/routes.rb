@@ -65,5 +65,10 @@ Rails.application.routes.draw do
       post 'follow', to: 'users#follow'
       delete 'unfollow', to: 'users#unfollow'
     end
+    scope '/test' do
+      get ':id', to: 'tests#index'
+      patch ':id', to: 'tests#update'
+      post 'create', to: 'tests#create'
+    end
   end
 end

@@ -1,4 +1,5 @@
 class Api::CategoriesController < Api::ApplicationController
+    before_action :no_authentication_required
     respond_to :json
     def index
         @categories = Category.select("id", "name").order("name")

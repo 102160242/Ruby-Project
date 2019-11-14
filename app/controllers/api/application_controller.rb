@@ -1,5 +1,5 @@
 class Api::ApplicationController < ActionController::API
-  acts_as_token_authentication_handler_for User, {fallback: :none}
+  acts_as_token_authentication_handler_for User, {fallback: :none, unless: :no_authentication_required}
 
   respond_to :json
 
@@ -33,5 +33,9 @@ class Api::ApplicationController < ActionController::API
 
   def login_invalid
     render_json("", "error", "Invalid login!", 200)
+  end
+
+  def no_authentication_required
+    self._process_action_callbacks.map {|c| c.filter }.compact.include? :no_authentication_required
   end
 end
