@@ -67,6 +67,7 @@ Rails.application.routes.draw do
     end
     scope '/test' do
       get ':id', to: 'tests#index'
+      get ':id/result', to: 'tests#result'
       patch ':id', to: 'tests#update'
       post 'create', to: 'tests#create'
     end

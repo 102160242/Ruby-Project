@@ -1,11 +1,11 @@
 class Api::TestsController < Api::ApplicationController
     before_action :ensure_token_exist, :authenticate_user_from_token
-    before_action :set_test, only: [:index, :update, :destroy]
+    before_action :set_test, only: [:index, :update, :result, :destroy]
 
     def index
         if !current_user.tests.include?(@test)
             render_json("", "error", "Test does not exist", 404)
-          else
+        else
             if @test.score.nil?
                 @test_json = @test.as_json
                 @questions = @test.questions.select("id", "question_content")
@@ -19,7 +19,40 @@ class Api::TestsController < Api::ApplicationController
             else
                 render_json("", "error", "You are no longer be able to do this test!")
             end
-          end
+        end
+    end
+
+    def result
+        if(@test.nil? || !current_user.tests.include?(@test))
+            render_json("", "error", "Test does not exist", 404)
+        else
+            if !@test.score.nil?
+
+                @test_json = @test.as_json
+                @test_json[:category] = @test.category.name
+                @test_json[:category_img] = url_for(@test.category.image.variant(resize: "100x100"))
+                @test_json.delete("updated_at")
+                
+                ## Lay danh sach cac cau hoi cung cau tra loi
+                @questions = @test.questions.select("id", "question_content")
+                @questions_array = @questions.map { |i| { id: i.id, question_content: i.question_content, answers: {}}}
+
+                @_array = QuestionsTest.select(:question_id, :chosen_answer_id).where(:test_id => @test.id).all
+                @chosen_answers_array = {}
+                @_array.each do |i|
+                    @chosen_answers_array[i.question_id] = i.chosen_answer_id
+                end
+                @questions.each_with_index do |i, index|
+                    @questions_array[index][:answers] = i.answers.select("id", "answer_content", "right_answer").as_json
+                    @questions_array[index][:chosen_answer_id] = @chosen_answers_array[i.id]
+                end
+
+                @test_json[:questions] = @questions_array
+                render_json(@test_json)
+            else
+                render_json("", "error", "You haven't done this test yet!")
+            end
+        end
     end
 
     def create
@@ -74,7 +107,7 @@ class Api::TestsController < Api::ApplicationController
 
     private
       def set_test
-        @test = Test.find(params[:id])
+        @test = Test.find_by(:id => params[:id])
       end
       def test_params
         params.require(:test).permit(:category_id, answer_ids: [])
