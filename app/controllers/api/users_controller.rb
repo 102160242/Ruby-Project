@@ -34,7 +34,22 @@ class Api::UsersController < Api::ApplicationController
     def followers
         @followers = @current_user.followers.select("id", "name", "email")
                             .order("name ASC")
-        render_json(@followers)
+        @follower_ids = @followers.map { |x| x.id }
+        @following_ids = current_user.following.where(id: @follower_ids).select("id").map { |x| x.id }
+
+        @followers_json = []
+
+        @followers.each_with_index do |item, i|
+            p i
+            if(@following_ids.include?(item.id))
+                @followers_json << { id: item.id, name: item.name, email: item.email, is_following: true }
+                #i[:is_following] = true
+            else
+                @followers_json << { id: item.id, name: item.name, email: item.email, is_following: false }
+                #i[:is_following] = false
+            end
+        end
+        render_json(@followers_json)
     end
 
     def follow
@@ -55,7 +70,7 @@ class Api::UsersController < Api::ApplicationController
             current_user.unfollow(@other_user)
             render_json("", "success", "Unfollowed user " + @other_user.name + "!")
         rescue Exception => e
-            render_json("", "error", "There was an error while attemping to unfollow this user!")
+            render_json("", "error", "There was an error while attemping to unfollow this user!" + e)
         end
 
     end
