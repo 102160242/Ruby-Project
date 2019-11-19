@@ -58,9 +58,9 @@ Rails.application.routes.draw do
     end
     scope '/user' do
       get 'info', to: 'users#info'
-      get 'newsfeed', to: 'users#newsfeed'
-      get 'followers', to: 'users#followers'
-      get 'following', to: 'users#following'
+      get ':user_id/newsfeed', to: 'users#newsfeed'
+      get ':user_id/followers', to: 'users#followers'
+      get ':user_id/following', to: 'users#following'
       patch 'update', to: 'users#update'
       post 'follow', to: 'users#follow'
       delete 'unfollow', to: 'users#unfollow'
