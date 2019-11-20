@@ -1,7 +1,7 @@
 class Api::UsersController < Api::ApplicationController
     include ApplicationHelper
     include ActionView::Helpers::DateHelper
-    before_action :ensure_token_exist, :authenticate_user_from_token
+    before_action :ensure_token_exist, :authenticate_user_from_token, except: [:newsfeed]
     before_action :user_params, only: [:update]
     #respond_to :json
 
@@ -19,6 +19,17 @@ class Api::UsersController < Api::ApplicationController
 
     def newsfeed
         @user = User.find(params[:user_id])
+        @user_info = { 
+                        id: @user.id,
+                        email: @user.email, 
+                        name: @user.name, 
+                        avatar_url: gravatar_url(@user.email, 100),
+                        created_at: @user.created_at,
+                        total_followers: @user.followers.count, 
+                        total_following: @user.following.count,
+                        total_learnt_words: @user.words.count,
+                     }
+
         ids = @user.following.select(:id).map {|x| x.id} << @user.id
         @tests = Test.where(user_id: ids)
                     .where.not(score: nil)
@@ -28,7 +39,7 @@ class Api::UsersController < Api::ApplicationController
             @t = { id: i.id, user_id: i.user.id, user: i.user.email, category: i.category.name, category_img: url_for(i.category.image.variant(resize: "100x100")), score: i.score, time: time_ago_in_words(i.created_at) }
             @timeline << @t
         end
-        render_json({ timeline: @timeline })        
+        render_json({ timeline: @timeline, user_info: @user_info })        
     end
 
     def following

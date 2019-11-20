@@ -1,6 +1,7 @@
 class Api::SessionsController < Devise::SessionsController
-    before_action :ensure_params_exist, only: [:create, :destroy]
-    before_action :load_user_authentication
+    before_action :ensure_params_exist, only: [:create]
+    before_action :load_user_authentication, except: [:destroy]
+    skip_before_action :verify_signed_out_user, only: [:destroy]
   
     respond_to :json
   
@@ -15,15 +16,20 @@ class Api::SessionsController < Devise::SessionsController
     end
   
     def destroy
-      if @user.authentication_token == user_params[:authentication_token] #token thông qua query string
-        sign_out @user
-        render json: {status: "success", message: "Signed out"}, status: 200
+      @current_user = current_user
+      if !@current_user.nil? #token thông qua query string
+        delete_token @current_user
+        render json: {status: "success", message: "Logged out successfully!"}, status: 200
       else
         render json: {status: "error", message: "Invalid token"}, status: 200
       end
     end
   
     private
+    def delete_token(current_user)
+      current_user.authentication_token = ""
+      current_user.save
+    end
     def user_params
       params.require(:user).permit :email, :password, :authentication_token
     end
