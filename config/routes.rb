@@ -70,5 +70,10 @@ Rails.application.routes.draw do
       patch ':id', to: 'tests#update'
       post 'create', to: 'tests#create'
     end
+    scope '/words' do 
+      get '', to: 'words#index'
+      post 'learntword', to: 'words#learntword'
+      delete 'unlearntword', to: 'words#unlearntword'
+    end
   end
 end
