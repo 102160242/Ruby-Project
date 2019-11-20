@@ -114,8 +114,8 @@ class Api::UsersController < Api::ApplicationController
                         return
                     end
                 end
-                p "Attributes la "
-                p @attributes
+                #p "Attributes la "
+                #p @attributes
                 @result = current_user.update(@attributes)
                 if(@result)
                     render_json("", "success", "Updated Successfully!")
