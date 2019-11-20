@@ -1,5 +1,6 @@
 class Api::UsersController < Api::ApplicationController
     include ApplicationHelper
+    include ActionView::Helpers::DateHelper
     before_action :ensure_token_exist, :authenticate_user_from_token
     before_action :user_params, only: [:update]
     #respond_to :json
@@ -17,28 +18,46 @@ class Api::UsersController < Api::ApplicationController
     end
 
     def newsfeed
-        @user = current_user
+        @user = User.find(params[:user_id])
         ids = @user.following.select(:id).map {|x| x.id} << @user.id
         @tests = Test.where(user_id: ids)
                     .where.not(score: nil)
                     .order("id DESC").limit(10)
-        render_json({ timeline: @tests, learnt_words_count: @user.words.count, following_count: @user.following.count, followers_count: @user.followers.count })        
+        @timeline = []
+        @tests.each do |i|
+            @t = { id: i.id, user_id: i.user.id, user: i.user.email, category: i.category.name, category_img: url_for(i.category.image.variant(resize: "100x100")), score: i.score, time: time_ago_in_words(i.created_at) }
+            @timeline << @t
+        end
+        render_json({ timeline: @timeline })        
     end
 
     def following
-        @following = @current_user.following.select("id", "name", "email")
+        @user = User.find(params[:user_id])
+        @following = @user.following.select("id", "name", "email")
                             .order("name ASC")
         render_json(@following)
     end
 
     def followers
-        @followers = @current_user.followers.select("id", "name", "email")
-                            .order("name ASC")
+        @user = User.find(params[:user_id])
+    
+        @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
+        @page = params[:search].nil? ? 1 : params[:page]
+        @per_page = 10
+
+        @followers = @user.followers
+                          .where("name LIKE ?", "%#{@search_key}%")
+                          .select("id", "name", "email")
+                          .order("name ASC")
+       
+        @returnData = paginate_list(@followers.length, @page, @per_page)
+
+        @followers = @followers.paginate(page: @page, :per_page => @per_page)
+                          
         @follower_ids = @followers.map { |x| x.id }
         @following_ids = current_user.following.where(id: @follower_ids).select("id").map { |x| x.id }
 
         @followers_json = []
-
         @followers.each_with_index do |item, i|
             p i
             if(@following_ids.include?(item.id))
@@ -49,7 +68,9 @@ class Api::UsersController < Api::ApplicationController
                 #i[:is_following] = false
             end
         end
-        render_json(@followers_json)
+
+        @returnData["list"] = @followers_json
+        render_json(@returnData)
     end
 
     def follow
@@ -93,8 +114,8 @@ class Api::UsersController < Api::ApplicationController
                         return
                     end
                 end
-                p "Attributes la "
-                p @attributes
+                #p "Attributes la "
+                #p @attributes
                 @result = current_user.update(@attributes)
                 if(@result)
                     render_json("", "success", "Updated Successfully!")
