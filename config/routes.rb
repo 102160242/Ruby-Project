@@ -76,5 +76,11 @@ Rails.application.routes.draw do
       post 'learntword', to: 'words#learntword'
       delete 'unlearntword', to: 'words#unlearntword'
     end
+    namespace :admin do
+      scope '/categories' do
+        get '', to: 'categories#index'
+        delete ':category_id', to: 'categories#delete'
+      end
+    end
   end
 end
