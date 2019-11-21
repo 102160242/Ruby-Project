@@ -11,7 +11,8 @@ class Api::ApplicationController < ActionController::API
               previous_page: (page.to_i == 1 ? false : page.to_i - 1), 
               current_page: page.to_i,
               next_page: ( total_item - (per_page.to_i * page.to_i) > 0 ? page.to_i + 1 : false ), 
-              last_page: (total_item.to_f / per_page).ceil
+              last_page: (total_item.to_f / per_page.to_i).ceil,
+              per_page: per_page.to_i
              },
              list: []
             }
