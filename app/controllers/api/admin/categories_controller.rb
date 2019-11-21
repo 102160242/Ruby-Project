@@ -1,6 +1,5 @@
 class Api::Admin::CategoriesController < Api::ApplicationController
-    before_action :no_authentication_required
-    before_action :current_category, except: [:create] 
+    before_action :current_category, except: [:create, :index] 
     respond_to :json
     def index
         @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
@@ -32,8 +31,22 @@ class Api::Admin::CategoriesController < Api::ApplicationController
             render_json("", "success", "Deleted category #{@category.name} successfully!")
         end
     end
+
+    def e
+        # @category = Category.find(params[:category_id])
+        # @returnData = (@category.count)
+        # @returnData["list"] = @category
+        @returnData = paginate_list(1, 1, 1)
+        @image_url = @category.image.attached? ? url_for(@category.image.variant(resize: "500x500")): "";
+        @jsonData = []
+        @jsonData << {:id => @category.id, :name => @category.name, :image_url => @image_url}
+        @returnData["list"] = @jsonData
+        render_json(@returnData)
+    end
+
     private
     def current_category
         @category ||= Category.find_by(id: params[:category_id])
     end
+
 end

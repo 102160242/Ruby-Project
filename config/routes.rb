@@ -80,6 +80,7 @@ Rails.application.routes.draw do
     namespace :admin do
       scope '/categories' do
         get '', to: 'categories#index'
+        get ':category_id/edit', to: 'categories#e'
         delete ':category_id', to: 'categories#delete'
       end
     end
