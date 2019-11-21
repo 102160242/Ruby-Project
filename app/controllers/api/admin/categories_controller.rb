@@ -24,7 +24,7 @@ class Api::Admin::CategoriesController < Api::ApplicationController
         render_json(@returnData) 
     end
 
-    def delete
+    def destroy
         if(@category.nil?)
             render_json("", "error", "Couldn't find the category you're trying to delete!")
         else
@@ -32,8 +32,27 @@ class Api::Admin::CategoriesController < Api::ApplicationController
             render_json("", "success", "Deleted category #{@category.name} successfully!")
         end
     end
+
+    def create
+        @category = Category.new(category_params)
+        begin
+            if @category.save
+                render_json("", "success", "Created new category successfully!")
+            else
+                render_json("", "error", @category.errors.messages)
+            end
+        rescue Exception
+            #p @category.errors
+            render_json("", "error", @category.errors.messages)
+            raise
+        end
+      end
+
     private
-    def current_category
+      def current_category
         @category ||= Category.find_by(id: params[:category_id])
-    end
+      end
+      def category_params
+        params.require(:category).permit(:name, :image)
+      end
 end

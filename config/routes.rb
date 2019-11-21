@@ -79,7 +79,8 @@ Rails.application.routes.draw do
     namespace :admin do
       scope '/categories' do
         get '', to: 'categories#index'
-        delete ':category_id', to: 'categories#delete'
+        post '', to: 'categories#create'
+        delete ':category_id', to: 'categories#destroy'
       end
     end
   end
