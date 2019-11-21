@@ -73,6 +73,7 @@ Rails.application.routes.draw do
     end
     scope '/words' do 
       get '', to: 'words#index'
+      get 'myword', to: 'words#myword'
       post 'learntword', to: 'words#learntword'
       delete 'unlearntword', to: 'words#unlearntword'
     end

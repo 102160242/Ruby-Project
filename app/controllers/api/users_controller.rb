@@ -33,9 +33,27 @@ class Api::UsersController < Api::ApplicationController
 
     def following
         @user = User.find(params[:user_id])
-        @following = @user.following.select("id", "name", "email")
-                            .order("name ASC")
-        render_json(@following)
+
+        @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
+        @page = params[:search].nil? ? 1 : params[:page]
+        @per_page = 10
+
+        @following = @user.following
+                        .where("name LIKE ?", "%#{@search_key}%")
+                        .select("id", "name", "email")
+                        .order("name ASC")
+
+        @returnData = paginate_list(@following.length, @page, @per_page)
+        @following = @following.paginate(page: @page, :per_page => @per_page)
+
+        @following_json = @following.as_json
+            
+        @following.each_with_index do |i, index|
+            @following_json[index]["is_following"] = true
+        end
+
+        @returnData["list"] = @following_json
+        render_json(@returnData)
     end
 
     def followers
