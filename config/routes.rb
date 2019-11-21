@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+  namespace :api do
+    namespace :admin do
+      get 'users/index'
+      get 'users/create'
+      get 'users/edit'
+      get 'users/destroy'
+      get 'users/update'
+    end
+  end
   root 'home#index'
   get 'signup', to: 'users#new'
   post 'signup', to: 'users#create'
@@ -81,7 +90,13 @@ Rails.application.routes.draw do
       scope '/categories' do
         get '', to: 'categories#index'
         get ':category_id/edit', to: 'categories#e'
-        delete ':category_id', to: 'categories#delete'
+        post '', to: 'categories#create'
+        delete ':category_id', to: 'categories#destroy'
+      end
+      scope '/users' do
+        get '', to: 'users#index'
+        post '', to: 'users#create'
+        delete ':user_id', to: 'users#destroy'
       end
     end
   end
