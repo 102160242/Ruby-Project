@@ -51,7 +51,7 @@ Rails.application.routes.draw do
       #get 'login', to: 'users#new'
       post 'signup', to: 'registrations#create'
       post 'login', to: 'sessions#create'
-      delete 'logout', to: 'sessions#destroy', via: Devise.mappings[:user].sign_out_via
+      delete 'logout', to: 'sessions#destroy'
     end
     scope '/categories' do
       get '', to: 'categories#index'
