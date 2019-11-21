@@ -1,5 +1,4 @@
 class Api::Admin::CategoriesController < Api::ApplicationController
-    before_action :no_authentication_required
     before_action :current_category, except: [:create] 
     respond_to :json
     def index
