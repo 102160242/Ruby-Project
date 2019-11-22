@@ -104,6 +104,10 @@ Rails.application.routes.draw do
       post 'learntword', to: 'words#learntword'
       delete 'unlearntword', to: 'words#unlearntword'
     end
+
+    get 'statistics', to: 'application#statistics'
+
+    ##### Admin #####
     namespace :admin do
       scope '/categories' do
         get '', to: 'categories#index'
