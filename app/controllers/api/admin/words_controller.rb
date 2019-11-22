@@ -13,7 +13,6 @@ class Api::Admin::WordsController < Api::ApplicationController
 
     @jsonData = []
     @words.each_with_index do |i, index|
-    #p i.image.variant(resize: "500x500")
       @jsonData << {
         id: i.id,
         word: i.word,
@@ -22,8 +21,6 @@ class Api::Admin::WordsController < Api::ApplicationController
         ipa: i.ipa,
         image_url: i.image.attached? ? url_for(i.image.variant(resize: "500x500")): ""
       }
-      #@jsonData[index]["total_learnt_words"] = i.words.count
-      # {:id => i.id, :name => i.name, :email => i.email, :admin => i.admin, :created_at => :total_learnt_words => i.words.count}
     end
     
     @returnData["list"] = @jsonData

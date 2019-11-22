@@ -60,7 +60,7 @@ class Api::Admin::QuestionsController < Api::ApplicationController
     def options
         @categories = Category.all.collect {|p| { id: p.id, name: p.name} }
         render_json({ categories: @categories }, "success", "Request has been proccessed successfully!")
-      end
+    end
     private
     def current_question
         @question ||= Question.find_by(id: params[:question_id])
