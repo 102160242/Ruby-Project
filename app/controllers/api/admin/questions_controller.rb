@@ -23,7 +23,7 @@ class Api::Admin::QuestionsController < Api::ApplicationController
         render_json(@returnData) 
     end
 
-    def delete
+    def destroy
         if(@question.nil?)
             render_json("", "error", "Couldn't find the question you're trying to delete!")
         else

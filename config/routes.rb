@@ -116,6 +116,11 @@ Rails.application.routes.draw do
         post '', to: 'questions#create'
         delete ':question_id', to: 'questions#destroy'
       end
+      scope '/answers' do
+        get '', to: 'answers#index'
+        post '', to: 'answers#create'
+        delete ':answer_id', to: 'answers#destroy'
+      end
     end
   end
 end
