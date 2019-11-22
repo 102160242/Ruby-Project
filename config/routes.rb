@@ -1,6 +1,15 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :admin do
+      get 'tests/index'
+      get 'tests/edit'
+      get 'tests/update'
+      get 'tests/create'
+      get 'tests/destroy'
+    end
+  end
+  namespace :api do
+    namespace :admin do
       get 'words/index'
       get 'words/create'
       get 'words/edit'
@@ -95,6 +104,10 @@ Rails.application.routes.draw do
       post 'learntword', to: 'words#learntword'
       delete 'unlearntword', to: 'words#unlearntword'
     end
+
+    get 'statistics', to: 'application#statistics'
+
+    ##### Admin #####
     namespace :admin do
       scope '/categories' do
         get '', to: 'categories#index'
@@ -121,8 +134,20 @@ Rails.application.routes.draw do
       end
       scope '/questions' do
         get '', to: 'questions#index'
+        get 'options', to: 'questions#options'
         post '', to: 'questions#create'
         delete ':question_id', to: 'questions#destroy'
+      end
+      scope '/answers' do
+        get '', to: 'answers#index'
+        post '', to: 'answers#create'
+        delete ':answer_id', to: 'answers#destroy'
+      end
+      scope '/tests' do
+        get '', to: 'tests#index'
+        get 'options', to: 'tests#options'
+        post '', to: 'tests#create'
+        delete ':test_id', to: 'tests#destroy'
       end
     end
   end

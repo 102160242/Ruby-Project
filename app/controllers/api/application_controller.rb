@@ -1,7 +1,18 @@
 class Api::ApplicationController < ActionController::API
   acts_as_token_authentication_handler_for User, {fallback: :none, unless: :no_authentication_required}
-
+  before_action :no_authentication_required, only: [:statistics]
   respond_to :json
+
+  def statistics
+    @data = {
+      total_categories: Category.count,
+      total_users: User.count,
+      total_words: Word.count,
+      total_questions: Question.count,
+      total_tests: Test.count
+    }
+    render_json(@data, "success", "")
+  end
 
   private
   def paginate_list(total_item, page, per_page)
