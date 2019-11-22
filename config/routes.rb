@@ -1,6 +1,15 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :admin do
+      get 'words/index'
+      get 'words/create'
+      get 'words/edit'
+      get 'words/update'
+      get 'words/destroy'
+    end
+  end
+  namespace :api do
+    namespace :admin do
       get 'users/index'
       get 'users/create'
       get 'users/edit'
@@ -98,6 +107,12 @@ Rails.application.routes.draw do
         get '', to: 'users#index'
         post '', to: 'users#create'
         delete ':user_id', to: 'users#destroy'
+      end
+      scope '/words' do
+        get '', to: 'words#index'
+        get 'options', to: 'words#options'
+        post '', to: 'words#create'
+        delete ':word_id', to: 'words#destroy'
       end
     end
   end
