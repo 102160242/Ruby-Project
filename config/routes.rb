@@ -133,6 +133,7 @@ Rails.application.routes.draw do
         get '', to: 'answers#index'
         post '', to: 'answers#create'
         delete ':answer_id', to: 'answers#destroy'
+      end
       scope '/tests' do
         get '', to: 'tests#index'
         get 'options', to: 'tests#options'
