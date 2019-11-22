@@ -45,12 +45,12 @@ class Api::Admin::UsersController < Api::ApplicationController
   def destroy
     begin
       if @user.destroy
-          render_json("", "success", "Delete user #{@user.email} successfully!")
+          render_json("", "success", "Deleted user #{@user.email} successfully!")
       else
           render_json("", "error", @user.errors.messages)
       end
     rescue Exception
-        #p @category.errors
+        #p @user.errors
         render_json("", "error", @user.errors.messages)
         raise
     end
