@@ -36,18 +36,19 @@ class Api::Admin::CategoriesController < Api::ApplicationController
         # @category = Category.find(params[:category_id])
         # @returnData = (@category.count)
         # @returnData["list"] = @category
+        
         @returnData = paginate_list(1, 1, 1)
         @image_url = @category.image.attached? ? url_for(@category.image.variant(resize: "500x500")): "";
         @jsonData = []
-        @jsonData << {:id => @category.id, :name => @category.name, :image_url => @image_url}
-        @returnData["list"] = @jsonData
-        render_json(@returnData)
+        @jsonData << {:id => @category.id, :name => @category.name, :image_url => @image_url, :total_words => current_category.words.count }
+        render json:
+        { status: "success", message: "", data: @returnData, category: @jsonData}, status: 200
     end
     
     def update
         begin
             if @category.update(category_params)
-                render_json("", "success", "update category successfully!")
+                render_json("", "success", "Updated Category Successfully!")
             else
                 render_json("", "error", @category.errors.messages)
             end
