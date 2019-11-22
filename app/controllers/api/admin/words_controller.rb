@@ -1,5 +1,5 @@
 class Api::Admin::WordsController < Api::ApplicationController
-  before_action :set_word, only: [:show, :edit, :update, :destroy]
+  before_action :set_word, only: [:show, :edit, :update, :destroy, :wordinfo]
   def index
     @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
     @order = (params[:order].nil? || params[:order] == "") ? "ASC" : params[:order]
@@ -30,6 +30,22 @@ class Api::Admin::WordsController < Api::ApplicationController
     render_json(@returnData) 
   end
 
+  def wordinfo
+    @category_id = @word.category_ids[0]
+    @jsonData = {
+      id: @word.id,
+      word: @word.word,
+      meaning: @word.meaning,
+      word_class: @word.word_class,
+      ipa: @word.ipa,
+      image_url: @word.image.attached? ? url_for(@word.image.variant(resize: "500x500")): "",
+      category_id: @category_id,
+      category_name: Category.find(@category_id).name
+      # category_name: @category_name.name
+    }
+    render_json(@jsonData, "success", "")
+  end
+
   def create
     p word_params
     @word = Word.new(word_params)
@@ -50,6 +66,17 @@ class Api::Admin::WordsController < Api::ApplicationController
   end
 
   def update
+    begin
+      if @word.update(word_params)
+          render_json("", "success", "Updated Word Successfully!")
+      else
+          render_json("", "error", @word.errors.messages)
+      end
+    rescue Exception
+        #p @category.errors
+        render_json("", "error", @word.errors.messages)
+        raise
+    end
   end
 
   def destroy

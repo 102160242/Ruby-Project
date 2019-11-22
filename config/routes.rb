@@ -105,12 +105,17 @@ Rails.application.routes.draw do
       end
       scope '/users' do
         get '', to: 'users#index'
+        get ':user_id/newsfeed', to: 'users#newsfeed'
+        get ':user_id', to: 'users#userInfo'
+        patch ':user_id', to: 'users#update'
         post '', to: 'users#create'
         delete ':user_id', to: 'users#destroy'
       end
       scope '/words' do
         get '', to: 'words#index'
-        get 'options', to: 'words#options'
+        get ':word_id', to: 'words#wordinfo'
+        get 'options/data', to: 'words#options'
+        patch ':word_id', to: 'words#update'
         post '', to: 'words#create'
         delete ':word_id', to: 'words#destroy'
       end

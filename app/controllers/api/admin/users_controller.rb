@@ -1,5 +1,7 @@
 class Api::Admin::UsersController < Api::ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  include ApplicationHelper
+  include ActionView::Helpers::DateHelper
+  before_action :set_user, only: [:show, :update, :destroy, :userInfo]
 
   def index
     @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
@@ -24,6 +26,31 @@ class Api::Admin::UsersController < Api::ApplicationController
     render_json(@returnData) 
   end
 
+  def newsfeed
+    @user = User.find(params[:user_id])
+    @user_info = { 
+                    id: @user.id,
+                    email: @user.email, 
+                    name: @user.name, 
+                    avatar_url: gravatar_url(@user.email, 100),
+                    created_at: @user.created_at,
+                    total_followers: @user.followers.count, 
+                    total_following: @user.following.count,
+                    total_learnt_words: @user.words.count,
+                 }
+
+    ids = @user.following.select(:id).map {|x| x.id} << @user.id
+    @tests = Test.where(user_id: ids)
+                .where.not(score: nil)
+                .order("id DESC").limit(10)
+    @timeline = []
+    @tests.each do |i|
+        @t = { id: i.id, user_id: i.user.id, user: i.user.email, category: i.category.name, category_img: url_for(i.category.image.variant(resize: "100x100")), score: i.score, time: time_ago_in_words(i.created_at) }
+        @timeline << @t
+    end
+    render_json({ timeline: @timeline, user_info: @user_info })        
+  end
+
   def create
     @user = User.new(user_params)
     begin
@@ -39,7 +66,9 @@ class Api::Admin::UsersController < Api::ApplicationController
     end
   end
 
-  def edit
+  def userInfo
+    @jsonData = {:id => @user.id, :name => @user.name, :email => @user.email, :avatar_url => gravatar_url(@user.email, 100),}
+    render_json(@jsonData, "success", "")
   end
 
   def destroy
@@ -57,6 +86,17 @@ class Api::Admin::UsersController < Api::ApplicationController
   end
 
   def update
+    begin
+      if @user.update(user_params)
+          render_json("", "success", "Updated User Successfully!")
+      else
+          render_json("", "error", @user.errors.messages)
+      end
+    rescue Exception
+        #p @category.errors
+        render_json("", "error", @user.errors.messages)
+        raise
+    end
   end
   private
     # Use callbacks to share common setup or constraints between actions.
