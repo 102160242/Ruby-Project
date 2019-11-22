@@ -3,14 +3,32 @@ class Api::WordsController < Api::ApplicationController
 
     def index
         @category = Category.find_by(id: params[:category_id])
+        @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
+        @order = (params[:order].nil? || params[:order] == "") ? "ASC" : params[:order]
+        @page = params[:search].nil? ? 1 : params[:page]
+        @per_page = 10
+        @filter = params[:filter]
 
         @words = Word.joins(:categories)
                     .where("categories.id = #{params[:category_id]}")
+                    .where("word LIKE ?", "%#{@search_key}%")
                     .select("id", "word", "word_class", "ipa", "meaning")
-                    .order("word ASC")
-        @words = @words.paginate(page: params[:page], :per_page => 10)
-        @words_json = @words.as_json
+                    .order("word #{@order}")
+                    # .learnt(current_user.id, false)
+        if @filter == "learnt"
+            @words = @words.learnt(current_user.id, true)
+        end
+        if @filter == "unlearnt"
+            @words = @words.learnt(current_user.id, false)
+        end
+        # if @filter == "learnt" || @filter == "unlearnt"
+        #     @words = Word.learnt(current_user.id, @filter == "learnt")
+        # end
 
+        @returnData = paginate_list(@words.length, @page, @per_page)
+        @words = @words.paginate(page: @page, :per_page => @per_page)
+
+        @words_json = @words.as_json
         @learnt_words = current_user.words 
 
         @words.each_with_index do |i, index|
@@ -24,7 +42,9 @@ class Api::WordsController < Api::ApplicationController
         end
         #@words_json = []
 
-        render_json(@words_json)
+        @returnData["list"] = @words_json
+        @returnData["category_name"] = @category.name
+        render_json(@returnData)
     end
 
     def learntword
@@ -45,5 +65,34 @@ class Api::WordsController < Api::ApplicationController
         rescue => e
             render_json("", "error", "There was an error while attemping to unlearnt this word!" + e)
         end
+    end
+
+    def myword
+        @category_id = params[:category_id].to_i
+        @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
+        @order = (params[:order].nil? || params[:order] == "") ? "ASC" : params[:order]
+        @page = params[:search].nil? ? 1 : params[:page]
+        @per_page = 10
+
+        @words = current_user.words
+                        .where("word LIKE ?", "%#{@search_key}%")
+                        .select("id", "word", "word_class", "ipa", "meaning")   
+                        .order("word #{@order}")
+        @words = @words.joins(:categories).where("categories.id = #{@category_id}") unless @category_id == 0
+
+        @returnData = paginate_list(@words.length, @page, @per_page)
+        @words = @words.paginate(page: @page, :per_page => @per_page)
+
+        @categories_json = Category.select(:id, :name).as_json
+        @words_json = @words.as_json
+
+        @words.each_with_index do |i, index|
+            @words_json[index]["word_class"] = Word.word_class_name(i["word_class"])
+            @words_json[index][:img_url] = url_for(i.image.variant(resize: "500x500"))
+            @words_json[index][:learnt] = true
+        end
+        @returnData["list"] = @words_json
+        @returnData["category_data"] = @categories_json
+        render_json(@returnData)
     end
 end
