@@ -43,6 +43,21 @@ class Api::Admin::CategoriesController < Api::ApplicationController
         @returnData["list"] = @jsonData
         render_json(@returnData)
     end
+    
+    def update
+        begin
+            if @category.update(category_params)
+                render_json("", "success", "update category successfully!")
+            else
+                render_json("", "error", @category.errors.messages)
+            end
+        rescue Exception
+            #p @category.errors
+            render_json("", "error", @category.errors.messages)
+            raise
+        end
+    end
+
     def create
         @category = Category.new(category_params)
         begin

@@ -91,6 +91,7 @@ Rails.application.routes.draw do
         get '', to: 'categories#index'
         get ':category_id/edit', to: 'categories#e'
         post '', to: 'categories#create'
+        patch ':category_id', to: 'categories#update'
         delete ':category_id', to: 'categories#destroy'
       end
       scope '/users' do
