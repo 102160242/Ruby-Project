@@ -1,4 +1,31 @@
 Rails.application.routes.draw do
+  namespace :api do
+    namespace :admin do
+      get 'tests/index'
+      get 'tests/edit'
+      get 'tests/update'
+      get 'tests/create'
+      get 'tests/destroy'
+    end
+  end
+  namespace :api do
+    namespace :admin do
+      get 'words/index'
+      get 'words/create'
+      get 'words/edit'
+      get 'words/update'
+      get 'words/destroy'
+    end
+  end
+  namespace :api do
+    namespace :admin do
+      get 'users/index'
+      get 'users/create'
+      get 'users/edit'
+      get 'users/destroy'
+      get 'users/update'
+    end
+  end
   root 'home#index'
   get 'signup', to: 'users#new'
   post 'signup', to: 'users#create'
@@ -80,7 +107,38 @@ Rails.application.routes.draw do
     namespace :admin do
       scope '/categories' do
         get '', to: 'categories#index'
-        delete ':category_id', to: 'categories#delete'
+        get ':category_id/edit', to: 'categories#e'
+        post '', to: 'categories#create'
+        patch ':category_id', to: 'categories#update'
+        delete ':category_id', to: 'categories#destroy'
+      end
+      scope '/users' do
+        get '', to: 'users#index'
+        post '', to: 'users#create'
+        delete ':user_id', to: 'users#destroy'
+      end
+      scope '/words' do
+        get '', to: 'words#index'
+        get 'options', to: 'words#options'
+        post '', to: 'words#create'
+        delete ':word_id', to: 'words#destroy'
+      end
+      scope '/questions' do
+        get '', to: 'questions#index'
+        get 'options', to: 'questions#options'
+        post '', to: 'questions#create'
+        delete ':question_id', to: 'questions#destroy'
+      end
+      scope '/answers' do
+        get '', to: 'answers#index'
+        post '', to: 'answers#create'
+        delete ':answer_id', to: 'answers#destroy'
+      end
+      scope '/tests' do
+        get '', to: 'tests#index'
+        get 'options', to: 'tests#options'
+        post '', to: 'tests#create'
+        delete ':test_id', to: 'tests#destroy'
       end
     end
   end

@@ -1,6 +1,5 @@
 class Api::Admin::CategoriesController < Api::ApplicationController
-    before_action :no_authentication_required
-    before_action :current_category, except: [:create] 
+    before_action :current_category, except: [:create, :index] 
     respond_to :json
     def index
         @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
@@ -24,7 +23,7 @@ class Api::Admin::CategoriesController < Api::ApplicationController
         render_json(@returnData) 
     end
 
-    def delete
+    def destroy
         if(@category.nil?)
             render_json("", "error", "Couldn't find the category you're trying to delete!")
         else
@@ -32,8 +31,53 @@ class Api::Admin::CategoriesController < Api::ApplicationController
             render_json("", "success", "Deleted category #{@category.name} successfully!")
         end
     end
-    private
-    def current_category
-        @category ||= Category.find_by(id: params[:category_id])
+
+    def e
+        # @category = Category.find(params[:category_id])
+        # @returnData = (@category.count)
+        # @returnData["list"] = @category
+        @returnData = paginate_list(1, 1, 1)
+        @image_url = @category.image.attached? ? url_for(@category.image.variant(resize: "500x500")): "";
+        @jsonData = []
+        @jsonData << {:id => @category.id, :name => @category.name, :image_url => @image_url}
+        @returnData["list"] = @jsonData
+        render_json(@returnData)
     end
+    
+    def update
+        begin
+            if @category.update(category_params)
+                render_json("", "success", "update category successfully!")
+            else
+                render_json("", "error", @category.errors.messages)
+            end
+        rescue Exception
+            #p @category.errors
+            render_json("", "error", @category.errors.messages)
+            raise
+        end
+    end
+
+    def create
+        @category = Category.new(category_params)
+        begin
+            if @category.save
+                render_json("", "success", "Created new category successfully!")
+            else
+                render_json("", "error", @category.errors.messages)
+            end
+        rescue Exception
+            #p @category.errors
+            render_json("", "error", @category.errors.messages)
+            raise
+        end
+      end
+
+    private
+      def current_category
+        @category ||= Category.find_by(id: params[:category_id])
+      end
+      def category_params
+        params.require(:category).permit(:name, :image)
+      end
 end
