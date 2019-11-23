@@ -6,10 +6,14 @@ class Api::Admin::UsersController < Api::ApplicationController
   def index
     @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
     @order = (params[:order].nil? || params[:order] == "") ? "ASC" : params[:order]
+    @order_by = (params[:order_by].nil? || params[:order_by] == "") ? "id" : params[:order_by]
+    @order_by = "id" if(!@order_by.eql?("id") && !@order_by.eql?("name") && !@order_by.eql?("email")) 
     @page = params[:page].nil? ? 1 : params[:page]
     @per_page = params[:per_page].nil? ? 10 : params[:per_page]
 
-    @users = User.select("id", "name", "email", "admin", "created_at").where("name LIKE ? OR email LIKE ?", "%#{@search_key}%", "%#{@search_key}%").order("created_at #{@order}")
+    @users = User.select("id", "name", "email", "admin", "created_at")
+                  .where("name LIKE ? OR email LIKE ?", "%#{@search_key}%", "%#{@search_key}%")
+                  .order("#{@order_by} #{@order}")
 
     @returnData = paginate_list(@users.length, @page, @per_page)
     @users = @users.paginate(page: @page, :per_page => @per_page)

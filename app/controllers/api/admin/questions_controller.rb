@@ -4,13 +4,23 @@ class Api::Admin::QuestionsController < Api::ApplicationController
     def index
         @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
         @order = (params[:order].nil? || params[:order] == "") ? "ASC" : params[:order]
+
+        @order_by = (params[:order_by].nil? || params[:order_by] == "") ? "id" : params[:order_by]
+        if(@order_by.eql?("question"))
+            @order_by = "question_content"
+        elsif(@order_by.eql?("category"))
+            @order_by = "categories.name"
+        else
+            @order_by = "questions.id"
+        end
+
         @page = params[:page].nil? ? 1 : params[:page]
         @per_page = params[:per_page].nil? ? 10 : params[:per_page]
 
         @questions = Question.joins(:category)
                              .select("id", "question_content", "name as category_name")
                              .where("question_content LIKE ?", "%#{@search_key}%")
-                             .order("questions.id #{@order}")
+                             .order("#{@order_by} #{@order}")
         @returnData = paginate_list(@questions.length, @page, @per_page)
         @questions = @questions.paginate(page: @page, :per_page => @per_page)
 

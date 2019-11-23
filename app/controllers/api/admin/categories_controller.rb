@@ -4,10 +4,14 @@ class Api::Admin::CategoriesController < Api::ApplicationController
     def index
         @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
         @order = (params[:order].nil? || params[:order] == "") ? "ASC" : params[:order]
+
+        @order_by = (params[:order_by].nil? || params[:order_by] == "") ? "id" : params[:order_by]
+        @order_by = "id" if(!@order_by.eql?("id") && !@order_by.eql?("name")) 
+        
         @page = params[:page].nil? ? 1 : params[:page]
         @per_page = params[:per_page].nil? ? 10 : params[:per_page]
 
-        @categories = Category.select("id", "name").where("name LIKE ?", "%#{@search_key}%").order("name #{@order}")
+        @categories = Category.select("id", "name").where("name LIKE ?", "%#{@search_key}%").order("#{@order_by} #{@order}")
 
         @returnData = paginate_list(@categories.length, @page, @per_page)
         @categories = @categories.paginate(page: @page, :per_page => @per_page)

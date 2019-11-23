@@ -3,10 +3,14 @@ class Api::Admin::WordsController < Api::ApplicationController
   def index
     @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
     @order = (params[:order].nil? || params[:order] == "") ? "ASC" : params[:order]
+    
+    @order_by = (params[:order_by].nil? || params[:order_by] == "") ? "id" : params[:order_by]
+    @order_by = "id" if(!@order_by.eql?("id") && !@order_by.eql?("word")) 
+
     @page = params[:page].nil? ? 1 : params[:page]
     @per_page = params[:per_page].nil? ? 10 : params[:per_page]
 
-    @words = Word.select("id", "word", "meaning", "word_class", "ipa").where("word LIKE ?", "%#{@search_key}%").order("word #{@order}")
+    @words = Word.select("id", "word", "meaning", "word_class", "ipa").where("word LIKE ?", "%#{@search_key}%").order("#{@order_by} #{@order}")
 
     @returnData = paginate_list(@words.length, @page, @per_page)
     @words = @words.paginate(page: @page, :per_page => @per_page)
