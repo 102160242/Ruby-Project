@@ -59,7 +59,28 @@ class Api::Admin::TestsController < Api::ApplicationController
         raise
     end
   end
+  def show
+    @test_json = @test.as_json
+    @test_json[:category] = @test.category.name
+    @test_json.delete("updated_at")
+    
+    ## Lay danh sach cac cau hoi cung cau tra loi
+    @questions = @test.questions.select("id", "question_content")
+    @questions_array = @questions.map { |i| { id: i.id, question_content: i.question_content, answers: {}}}
 
+    @_array = QuestionsTest.select(:question_id, :chosen_answer_id).where(:test_id => @test.id).all
+    @chosen_answers_array = {}
+    @_array.each do |i|
+        @chosen_answers_array[i.question_id] = i.chosen_answer_id
+    end
+    @questions.each_with_index do |i, index|
+        @questions_array[index][:answers] = i.answers.select("id", "answer_content", "right_answer").as_json
+        @questions_array[index][:chosen_answer_id] = @chosen_answers_array[i.id]
+    end
+
+    @test_json[:questions] = @questions_array
+    render_json(@test_json)
+  end
   def destroy
     begin
       if @test.destroy
