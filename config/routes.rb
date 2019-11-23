@@ -125,10 +125,8 @@ Rails.application.routes.draw do
       end
       scope '/questions' do
         get '', to: 'questions#index'
-        get ':question_id/edit', to: 'questions#edit'
         get 'options', to: 'questions#options'
         post '', to: 'questions#create'
-        patch ':question_id', to: 'questions#update'
         delete ':question_id', to: 'questions#destroy'
       end
       scope '/answers' do
@@ -138,9 +136,8 @@ Rails.application.routes.draw do
       end
       scope '/tests' do
         get '', to: 'tests#index'
-        get ':test_id', to: 'tests#result'
-        get ':test_id/edit', to: 'tests#edit'
         get 'options', to: 'tests#options'
+        get ':test_id', to: 'tests#show'
         post '', to: 'tests#create'
         delete ':test_id', to: 'tests#destroy'
       end

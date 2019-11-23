@@ -1,7 +1,6 @@
 class Api::Admin::QuestionsController < Api::ApplicationController
     before_action :current_question, except: [:create, :index] 
     respond_to :json
-
     def index
         @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
         @order = (params[:order].nil? || params[:order] == "") ? "ASC" : params[:order]
@@ -23,7 +22,6 @@ class Api::Admin::QuestionsController < Api::ApplicationController
         @returnData["list"] = @jsonData
         render_json(@returnData) 
     end
-
     def create
         @question = Question.new({ question_content: params[:question][:question_content], category_id: params[:question][:category_id] })
         begin
@@ -46,12 +44,11 @@ class Api::Admin::QuestionsController < Api::ApplicationController
             end
             render_json("", "error", @question.errors.messages)
         rescue Exception
-            #p @question.errors
+            #p @category.errors
             render_json("", "error", @question.errors.messages)
             raise
         end
     end
-
     def destroy
         if(@question.nil?)
             render_json("", "error", "Couldn't find the question you're trying to delete!")
@@ -60,32 +57,9 @@ class Api::Admin::QuestionsController < Api::ApplicationController
             render_json("", "success", "Deleted question #{@question.question_content} successfully!")
         end
     end
-
-    def edit
-        @returnData = paginate_list(1, 1, 1)
-        @jsonData = []
-        @jsonData << {:id => @question.id, :name => @question.name, :image_url => @image_url}
-        @returnData["list"] = @jsonData
-        render_json(@returnData)
-    end
-
-    def update
-        begin
-            if @question.update(question_params)
-                render_json("", "success", "update question successfully!")
-            else
-                render_json("", "error", @question.errors.messages)
-            end
-        rescue Exception
-            #p @question.errors
-            render_json("", "error", @question.errors.messages)
-            raise
-        end
-    end
-
     def options
-        @questions = Question.all.collect {|p| { id: p.id, question_content: p.question_content} }
-        render_json({ questions: @questions }, "success", "Request has been proccessed successfully!")
+        @categories = Category.all.collect {|p| { id: p.id, name: p.name} }
+        render_json({ categories: @categories }, "success", "Request has been proccessed successfully!")
     end
     private
     def current_question
