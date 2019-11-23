@@ -22,6 +22,20 @@ class Api::Admin::QuestionsController < Api::ApplicationController
         @returnData["list"] = @jsonData
         render_json(@returnData) 
     end
+
+    def getinfo
+        @question = Question.find(params[:question_id])
+        @category_name = Category.find(@question.category_id).name
+        @answers = @question.answers.select("id", "question_id", "answer_content", "right_answer").as_json
+        @jsonData = {
+            question_content: @question.question_content,
+            category_id: @question.category_id,
+            category_name: @category_name,
+            answers: @answers
+        }
+        render_json(@jsonData, "success", "")
+    end
+
     def create
         @question = Question.new({ question_content: params[:question][:question_content], category_id: params[:question][:category_id] })
         begin
@@ -49,6 +63,37 @@ class Api::Admin::QuestionsController < Api::ApplicationController
             raise
         end
     end
+
+    def update
+        begin
+            params_ = params[:question]
+            @question.question_content = params_[:question_content]
+            @question.category_id = params_[:category_id]
+            if @question.save
+                answers_params = params_[:answers]
+                #p "#########################"
+                answers_params.each do |i|
+                    answer = @question.answers.find(i[:id])
+                    answer.answer_content = i[:answer_content]
+                    answer.right_answer = i[:right_answer]
+                    if !answer.save
+                        render_json("", "error", answer.errors.messages)
+                        return
+                    end
+                end
+                if @question.save
+                    render_json("", "success", "Created new question successfully!")
+                end
+                return
+            end
+            render_json("", "error", @question.errors.messages)
+        rescue Exception
+            #p @category.errors
+            render_json("", "error", @question.errors.messages)
+            raise
+        end
+      end
+
     def destroy
         if(@question.nil?)
             render_json("", "error", "Couldn't find the question you're trying to delete!")
@@ -62,6 +107,7 @@ class Api::Admin::QuestionsController < Api::ApplicationController
         render_json({ categories: @categories }, "success", "Request has been proccessed successfully!")
     end
     private
+    
     def current_question
         @question ||= Question.find_by(id: params[:question_id])
     end

@@ -134,7 +134,9 @@ Rails.application.routes.draw do
       end
       scope '/questions' do
         get '', to: 'questions#index'
-        get 'options', to: 'questions#options'
+        get 'options/data', to: 'questions#options'
+        get ':question_id', to: 'questions#getinfo'
+        patch ':question_id', to: 'questions#update'
         post '', to: 'questions#create'
         delete ':question_id', to: 'questions#destroy'
       end
