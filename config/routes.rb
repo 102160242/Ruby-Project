@@ -138,6 +138,8 @@ Rails.application.routes.draw do
       end
       scope '/tests' do
         get '', to: 'tests#index'
+        get ':test_id', to: 'tests#result'
+        get ':test_id/edit', to: 'tests#edit'
         get 'options', to: 'tests#options'
         post '', to: 'tests#create'
         delete ':test_id', to: 'tests#destroy'
