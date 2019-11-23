@@ -5,6 +5,16 @@ class Api::Admin::TestsController < Api::ApplicationController
   def index
     @search_key = (params[:search].nil? || params[:search] == "") ? "" : params[:search]
     @order = (params[:order].nil? || params[:order] == "") ? "ASC" : params[:order]
+
+    @order_by = (params[:order_by].nil? || params[:order_by] == "") ? "id" : params[:order_by]
+    if(@order_by.eql?("user"))
+        @order_by = "users.email"
+    elsif(@order_by.eql?("category"))
+        @order_by = "categories.name"
+    else
+        @order_by = "tests.id"
+    end
+
     @page = params[:page].nil? ? 1 : params[:page]
     @per_page = params[:per_page].nil? ? 10 : params[:per_page]
 
@@ -12,7 +22,7 @@ class Api::Admin::TestsController < Api::ApplicationController
                 .joins(:category)
                 .select("tests.id", "users.email as user_email", "categories.name as category_name", "score", "created_at")
                 .where("category_name LIKE ? OR user_email LIKE ?", "%#{@search_key}%", "%#{@search_key}%")
-                .order("tests.id #{@order}")
+                .order("#{@order_by} #{@order}")
 
     @returnData = paginate_list(@tests.length, @page, @per_page)
     @tests = @tests.paginate(page: @page, :per_page => @per_page)
