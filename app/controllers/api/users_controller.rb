@@ -13,6 +13,7 @@ class Api::UsersController < Api::ApplicationController
         @json[:total_following] = @current_user.following.count
         @json[:total_learnt_words] = @current_user.words.count
         @json[:total_test] = @current_user.tests.count
+        @json[:following_user_ids] = @current_user.following.pluck("id")
         render_json(@json)
         #render :json => { status: :success, data: @current_user }
     end
