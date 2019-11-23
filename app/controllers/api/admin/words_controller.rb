@@ -6,7 +6,7 @@ class Api::Admin::WordsController < Api::ApplicationController
     @page = params[:page].nil? ? 1 : params[:page]
     @per_page = params[:per_page].nil? ? 10 : params[:per_page]
 
-    @words = Word.select("id", "word", "meaning", "word_class", "ipa").where("word LIKE ?", "%#{@search_key}%").order("word #{@order}")
+    @words = Word.select("id", "word", "meaning", "word_class", "ipa").where("word LIKE ?", "%#{@search_key}%").order("id #{@order}")
 
     @returnData = paginate_list(@words.length, @page, @per_page)
     @words = @words.paginate(page: @page, :per_page => @per_page)

@@ -125,8 +125,10 @@ Rails.application.routes.draw do
       end
       scope '/questions' do
         get '', to: 'questions#index'
+        get ':question_id/edit', to: 'questions#edit'
         get 'options', to: 'questions#options'
         post '', to: 'questions#create'
+        patch ':question_id', to: 'questions#update'
         delete ':question_id', to: 'questions#destroy'
       end
       scope '/answers' do

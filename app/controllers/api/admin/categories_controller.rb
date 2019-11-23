@@ -7,7 +7,7 @@ class Api::Admin::CategoriesController < Api::ApplicationController
         @page = params[:page].nil? ? 1 : params[:page]
         @per_page = params[:per_page].nil? ? 10 : params[:per_page]
 
-        @categories = Category.select("id", "name").where("name LIKE ?", "%#{@search_key}%").order("name #{@order}")
+        @categories = Category.select("id", "name").where("name LIKE ?", "%#{@search_key}%").order("id #{@order}")
 
         @returnData = paginate_list(@categories.length, @page, @per_page)
         @categories = @categories.paginate(page: @page, :per_page => @per_page)
